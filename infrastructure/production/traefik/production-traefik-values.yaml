@@ -85,8 +85,12 @@ ports:
     expose:
       default: true
     exposedPort: 80
-    redirectTo:
-      port: websecure
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
   websecure:
     ## -- Enable this entrypoint as a default entrypoint. When a service doesn't explicitly set an entrypoint it will only use this entrypoint.
     asDefault: true
