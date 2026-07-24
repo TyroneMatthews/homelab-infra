@@ -6,7 +6,8 @@ metadata:
 spec:
   secretName: vaultwarden-tls-cert
   dnsNames:
-    - vaultwarden.tmatthews.casa
+    - "*.tmatthews.casa"
+    - "tmatthews.casa"
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
