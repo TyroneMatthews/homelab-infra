@@ -8,7 +8,7 @@ metadata:
   labels:
     bgp-advertise: "true"
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: vaultwarden
   ports:
