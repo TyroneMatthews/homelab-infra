@@ -5,3 +5,4 @@ resources:
   - ../../base/cert-manager
   - clusterissuer-production.yaml
   - wildcard-cert.yaml
+  - traefik-wildcard.yaml
