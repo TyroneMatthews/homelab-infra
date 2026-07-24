@@ -5,5 +5,5 @@ resources:
   - ../../base/vaultwarden
 
   - certificate.yaml
-  # - ingressroute.yaml
+  - ingressroute.yaml
   # - vault-secrets.yaml
