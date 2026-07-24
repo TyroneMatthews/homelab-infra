@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
   - ../../base/vaultwarden
 
-  # - certificate.yaml
+  - certificate.yaml
   # - ingressroute.yaml
   # - vault-secrets.yaml
