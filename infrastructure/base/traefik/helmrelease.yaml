@@ -27,8 +27,3 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
-
-  # rollback:
-  #   cleanupOnFail: true
-  #   remediation:
-  #     retries: 3

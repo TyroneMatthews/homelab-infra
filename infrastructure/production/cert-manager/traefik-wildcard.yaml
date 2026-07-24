@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-tmatthews-casa
+  namespace: traefik
+spec:
+  secretName: wildcard-tmatthews-casa-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.tmatthews.casa"
+    - "tmatthews.casa"
