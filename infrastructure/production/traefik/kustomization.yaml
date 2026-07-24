@@ -6,5 +6,7 @@ resources:
 
 configMapGenerator:
   - name: traefik-values
+    options:
+      disableNameSuffixHash: true
     files:
       - values.yaml=production-traefik-values.yaml
