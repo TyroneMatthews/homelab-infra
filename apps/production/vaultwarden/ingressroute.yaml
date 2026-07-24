@@ -7,9 +7,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`://example.com`)
+  - match: Host(`vaultwarden.tmatthews.casa`)
     kind: Rule
     services:
     - name: api-service
       port: 80
-  tls: {} # Keep this empty. Traefik automatically applies the default TLSStore.
+  tls: #{} # Keep this empty. Traefik automatically applies the default TLSStore.
+    vaultwarden-tls-cert
