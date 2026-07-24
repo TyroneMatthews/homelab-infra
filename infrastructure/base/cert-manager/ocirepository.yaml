@@ -1,10 +1,21 @@
+# apiVersion: source.toolkit.fluxcd.io/v1
+# kind: OCIRepository
+# metadata:
+#   name: cert-manager
+#   namespace: cert-manager
+# spec:
+#   interval: 1h
+#   url: oci://quay.io/jetstack/charts/cert-manager
+#   ref:
+#     tag: v1.21.0
+
+
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
+kind: HelmRepository
 metadata:
   name: cert-manager
   namespace: cert-manager
 spec:
   interval: 1h
-  url: oci://quay.io/jetstack/charts/cert-manager
-  ref:
-    tag: v1.21.0
+  type: oci
+  url: oci://quay.io/jetstack/charts/cert-manager # or oci://registry-1.docker.io/bitnamicharts/cert-manager
