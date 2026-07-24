@@ -1,0 +1,13 @@
+# Persistent data: SQLite DB, attachments, icon cache, RSA keys. RWO on Ceph.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vaultwarden-data
+  namespace: vaultwarden
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ugreen-nfs-sc
+  resources:
+    requests:
+      storage: 15Gi

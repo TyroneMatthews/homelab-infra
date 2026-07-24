@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vaultwarden
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+  labels:
+    app: vaultwarden
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaultwarden
+  strategy:
+    # RWO PVC + single-writer SQLite: never run two pods against this volume.
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      serviceAccountName: default
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: vaultwarden
+          # Pin to a real published tag — verify the latest stable release at
+          # https://github.com/dani-garcia/vaultwarden/releases (never use :latest).
+          image: vaultwarden/server:1.36.0-alpine
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            # Public origin — must match the Gateway hostname (used for links,
+            # WebAuthn/2FA origin checks, and invite URLs).
+            - name: DOMAIN
+              value: "https://vaultwarden.tmatthews.casa"
+            # Bind on 8080 so the non-root user can listen without NET_BIND_SERVICE.
+            - name: ROCKET_PORT
+              value: "8080"
+            - name: ROCKET_ADDRESS
+              value: "0.0.0.0"
+            # Data directory (matches the /data volume mount below).
+            - name: DATA_FOLDER
+              value: "/data"
+            # Invitation-only pilot — no open self-registration.
+            - name: SIGNUPS_ALLOWED
+              value: "false"
+            - name: INVITATIONS_ALLOWED
+              value: "true"
+            # Disabled until SMTP is configured (Phase 2). With no mail delivery,
+            # "true" would leave invited users unable to complete signup because
+            # the verification email can never be sent. Re-enable once SMTP env
+            # vars below are uncommented and the Vault secret keys are populated.
+            - name: SIGNUPS_VERIFY
+              value: "false"
+            # Restrict any future signups/invites to the corporate domain.
+            - name: SIGNUPS_DOMAINS_WHITELIST
+              value: "tmatthews.casa"
+            # Admin panel (/admin) token — Argon2 hash from Vault.
+            - name: ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vaultwarden-credentials
+                  key: ADMIN_TOKEN
+            # ---------------------------------------------------------------
+            # Phase 2 — Postgres backend. Add DATABASE_URL to the Vault secret
+            # (postgresql://user:pass@host:5432/db) and uncomment:
+            # - name: DATABASE_URL
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: vaultwarden-credentials
+            #       key: DATABASE_URL
+            #
+            # SMTP (invite/verification email) — add the keys to the Vault
+            # secret and uncomment to enable email delivery:
+            # - name: SMTP_HOST
+            #   valueFrom: { secretKeyRef: { name: vaultwarden-credentials, key: SMTP_HOST } }
+            # - name: SMTP_FROM
+            #   value: "vaultwarden@omnissa.com"
+            # - name: SMTP_PORT
+            #   value: "587"
+            # - name: SMTP_SECURITY
+            #   value: "starttls"
+            # - name: SMTP_USERNAME
+            #   valueFrom: { secretKeyRef: { name: vaultwarden-credentials, key: SMTP_USERNAME } }
+            # - name: SMTP_PASSWORD
+            #   valueFrom: { secretKeyRef: { name: vaultwarden-credentials, key: SMTP_PASSWORD } }
+            # ---------------------------------------------------------------
+          livenessProbe:
+            httpGet:
+              path: /alive
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /alive
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: vaultwarden-data
+        - name: tmp
+          emptyDir: {}
