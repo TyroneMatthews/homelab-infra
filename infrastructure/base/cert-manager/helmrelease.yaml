@@ -4,11 +4,14 @@ metadata:
   name: cert-manager
   namespace: cert-manager
 spec:
-  interval: 30m
-  chartRef:
-    kind: OCIRepository
-    name: cert-manager
-    namespace: cert-manager
+  interval: 1h
+  chart:
+    spec:
+      chart: cert-manager
+      version: "v1.21.0" # Use whatever version you need
+      sourceRef:
+        kind: HelmRepository
+        name: cert-manager
 
   install:
     crds: CreateReplace
