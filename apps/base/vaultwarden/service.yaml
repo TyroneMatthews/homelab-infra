@@ -3,8 +3,12 @@ kind: Service
 metadata:
   name: vaultwarden-svc
   namespace: vaultwarden
+  annotations:
+    lbipam.cilium.io/ips: "192.168.40.20"
+  labels:
+    bgp-advertise: "true"
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: vaultwarden
   ports:
