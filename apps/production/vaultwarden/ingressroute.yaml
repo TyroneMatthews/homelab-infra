@@ -4,6 +4,7 @@ metadata:
   name: app-vaultwarden
   namespace: vaultwarden
 spec:
+  ingressClassName: traefik
   entryPoints:
     - websecure
   routes:
