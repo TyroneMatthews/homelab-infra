@@ -62,7 +62,7 @@ spec:
               value: "/data"
             # Invitation-only pilot — no open self-registration.
             - name: SIGNUPS_ALLOWED
-              value: "false"
+              value: "true"
             - name: INVITATIONS_ALLOWED
               value: "true"
             # Disabled until SMTP is configured (Phase 2). With no mail delivery,
