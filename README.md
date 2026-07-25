@@ -16,27 +16,27 @@ An automated, declarative home lab environment powered by Kubernetes and GitOps.
 ### Physical Nodes
 | Hostname | Role | Specs | Network | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| `node-01` | Control Plane / Worker | Mac Mini (10GbE) | 192.168.30.11 | died/needs to replaced |
-| `node-02` | Control Plane / Worker | Mac Mini (10GbE) | 192.168.30.12 | |
-| `node-03` | Control Plane / Worker | Mac Mini (10GbE) | 192.168.30.13 | |
-| `ugreen` | NAS / Storage | DXP4800 Pro (10GbE) | 192.168.90.250 | NFS share |
+| `node-01` | Control Plane / Worker | Mac Mini (10GbE) | 10.0.30.x | died/needs to replaced |
+| `node-02` | Control Plane / Worker | Mac Mini (10GbE) | 10.0.30.x | |
+| `node-03` | Control Plane / Worker | Mac Mini (10GbE) | 10.0.30.x | |
+| `ugreen` | NAS / Storage | DXP4800 Pro (10GbE) | 10.0.90.x | NFS share |
 
 ### Network Segmentation
 
 | VLAN ID | Subnet / CIDR | Purpose | Routing Type | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| `10` | `192.168.10.0/24` | Main / Trusted | Routed | Laptops, desktops, trusted mobile devices. |
-| `20` | `192.168.20.0/24` | Media | Routed | Streaming sticks, TVs, game consoles. |
-| `30` | `192.168.30.0/24` | K8s Hosts / Nodes | Routed | Physical bare-metal OS IPs of the mini PCs. |
+| `10` | `10.0.10.0/24` | Main / Trusted | Routed | Laptops, desktops, trusted mobile devices. |
+| `20` | `10.0.20.0/24` | Media | Routed | Streaming sticks, TVs, game consoles. |
+| `30` | `10.0.30.0/24` | K8s Hosts / Nodes | Routed | Physical bare-metal OS IPs of the mini PCs. |
 | `35` | `N/A (L2 Only)` | Pod Network | Non-Routed | L2 VLAN for pod traffic to separate it from node traffic. |
-| `38` | `192.168.38.0/24` | BGP Peering | Routed (Transit) | BGP peering transit subnet connecting nodes to router. |
-| `40` | `192.168.40.0/24` | Service IPs via BGP | BGP Advertised | Data Plane: Ingress and External Service VIPs. |
-| `50` | `192.168.50.0/23` | IoT / Smart Home | Routed | Spans 192.168.50.1 to 192.168.51.254. |
-| `60` | `192.168.60.0/24` | Guest Wi-Fi | Routed | Isolated internet-only access. |
-| `75` | `192.168.75.0/24` | L2 Storage Data | Non-Routed | High-speed NFS/iSCSI storage traffic (Jumbo Frames / MTU 9000). |
-| `80` | `192.168.80.0/24` | DMZ / Ingress | Routed | Public-facing reverse proxies and edge tunnels. |
-| `90` | `192.168.90.0/24` | Infra Management | Routed | Switches, RouterOS management, and NAS Web UI. |
-| `91` | `192.168.91.0/24` | Infra Services | Routed | Technitium DNS, Omada Controller, and core services. |
+| `38` | `10.0.38.0/24` | BGP Peering | Routed (Transit) | BGP peering transit subnet connecting nodes to router. |
+| `40` | `10.0.40.0/24` | Service IPs via BGP | BGP Advertised | Data Plane: Ingress and External Service VIPs. |
+| `50` | `10.0.50.0/23` | IoT / Smart Home | Routed | Spans 192.168.50.1 to 192.168.51.254. |
+| `60` | `10.0.60.0/24` | Guest Wi-Fi | Routed | Isolated internet-only access. |
+| `75` | `10.0.75.0/24` | L2 Storage Data | Non-Routed | High-speed NFS/iSCSI storage traffic (Jumbo Frames / MTU 9000). |
+| `80` | `10.0.80.0/24` | DMZ / Ingress | Routed | Public-facing reverse proxies and edge tunnels. |
+| `90` | `10.0.90.0/24` | Infra Management | Routed | Switches, RouterOS management, and NAS Web UI. |
+| `91` | `10.0.91.0/24` | Infra Services | Routed | Technitium DNS, Omada Controller, and core services. |
 
 ## 🛠️ Tech Stack
 
