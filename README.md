@@ -31,7 +31,7 @@ An automated, declarative home lab environment powered by Kubernetes and GitOps.
 | `35` | `N/A (L2 Only)` | Pod Network | Non-Routed | L2 VLAN for pod traffic to separate it from node traffic. |
 | `38` | `10.0.38.0/24` | BGP Peering | Routed (Transit) | BGP peering transit subnet connecting nodes to router. |
 | `40` | `10.0.40.0/24` | Service IPs via BGP | BGP Advertised | Data Plane: Ingress and External Service VIPs. |
-| `50` | `10.0.50.0/23` | IoT / Smart Home | Routed | Spans 192.168.50.1 to 192.168.51.254. |
+| `50` | `10.0.50.0/23` | IoT / Smart Home | Routed | Spans 10.0.50.1 to 10.0.51.254. |
 | `60` | `10.0.60.0/24` | Guest Wi-Fi | Routed | Isolated internet-only access. |
 | `75` | `10.0.75.0/24` | L2 Storage Data | Non-Routed | High-speed NFS/iSCSI storage traffic (Jumbo Frames / MTU 9000). |
 | `80` | `10.0.80.0/24` | DMZ / Ingress | Routed | Public-facing reverse proxies and edge tunnels. |
