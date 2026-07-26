@@ -75,11 +75,11 @@ spec:
             - name: SIGNUPS_DOMAINS_WHITELIST
               value: "tmatthews.casa"
             # Admin panel (/admin) token — Argon2 hash from Vault.
-            # - name: ADMIN_TOKEN
-            #   valueFrom:
-            #     secretKeyRef:
-            #       name: vaultwarden-credentials
-            #       key: ADMIN_TOKEN
+            - name: ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: vw-secret
+                  key: ADMIN_TOKEN
             # ---------------------------------------------------------------
             # Phase 2 — Postgres backend. Add DATABASE_URL to the Vault secret
             # (postgresql://user:pass@host:5432/db) and uncomment:
