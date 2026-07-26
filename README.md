@@ -16,7 +16,7 @@ An automated, declarative home lab environment powered by Kubernetes and GitOps.
 ### Physical Nodes
 | Hostname | Role | Specs | Network | Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| `node-01` | Control Plane / Worker | Mac Mini (10GbE) | 10.0.30.x | died/needs to replaced |
+| `node-01` | Control Plane / Worker | Mac Mini (10GbE) | 10.0.30.x | |
 | `node-02` | Control Plane / Worker | Mac Mini (10GbE) | 10.0.30.x | |
 | `node-03` | Control Plane / Worker | Mac Mini (10GbE) | 10.0.30.x | |
 | `ugreen` | NAS / Storage | DXP4800 Pro (10GbE) | 10.0.90.x | NFS share |
