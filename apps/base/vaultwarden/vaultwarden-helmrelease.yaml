@@ -40,8 +40,8 @@ spec:
 
     database:
       type: postgresql
-      existingSecret: vaultwarden-db-url
-      existingSecretKey: database-url
+      existingSecret: vaultwarden-db-secret
+      existingSecretKey: uri
       connectionRetries: 30
       maxConnections: 10
 
