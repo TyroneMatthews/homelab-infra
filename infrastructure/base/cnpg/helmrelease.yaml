@@ -5,6 +5,7 @@ metadata:
   namespace: cnpg-system
 spec:
   interval: 30m
+
   chart:
     spec:
       chart: cloudnative-pg
@@ -12,8 +13,10 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cnpg
-        namespace: flux-system
+        namespace: cnpg-system
+
   install:
     crds: Create
+
   upgrade:
     crds: CreateReplace
