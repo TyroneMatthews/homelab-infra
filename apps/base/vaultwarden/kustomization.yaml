@@ -3,7 +3,14 @@ kind: Kustomization
 namespace: vaultwarden
 
 resources:
-  - deployment.yaml
-  - pvc.yaml
-  - service.yaml
+  - namespace.yaml
+  - vaultwarden-db-secret.yaml
+  - postgres-helmrepository.yaml
+  - postgres-helmrelease.yaml
+  - vaultwarden-helmrepository.yaml
+  - vaultwarden-helmrelease.yaml
+  - gateway.yaml
+  - httproute.yaml
+  - https-redirect.yaml
+  - vaultwarden-db-url.yaml
   - vw-secret.yaml
