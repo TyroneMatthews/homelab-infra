@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - cert-manager
   - traefik
-  - cnpg
+  - ../../base/cnpg
