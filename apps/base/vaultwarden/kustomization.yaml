@@ -5,8 +5,7 @@ namespace: vaultwarden
 resources:
   - namespace.yaml
   - vaultwarden-db-secret.yaml
-  - postgres-helmrepository.yaml
-  - postgres-helmrelease.yaml
+  - postgres-cluster.yaml
   - vaultwarden-helmrepository.yaml
   - vaultwarden-helmrelease.yaml
   - gateway.yaml
