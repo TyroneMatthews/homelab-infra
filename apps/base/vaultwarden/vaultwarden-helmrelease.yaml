@@ -27,8 +27,6 @@ spec:
     remediation:
       retries: 3
 
-  replicas: 2
-
   values:
     domain: "https://test-vaultwarden.tmatthews.casa"
 
@@ -56,8 +54,7 @@ spec:
         enabled: true
         size: 1Gi
         class: ugreen-nfs-sc
-        path: /data
-        accessModes: ReadWriteMany
+        dataDir: /data
 
     service:
       type: ClusterIP
