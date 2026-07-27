@@ -9,7 +9,7 @@ spec:
   # Storage configuration
   storage:
     size: 5Gi
-    storageClass: ugreen-nfs-sc # Adjust to your RWO storage class
+    storageClass: local-path # Adjust to your RWO storage class
 
   # Database initialization defaults
   bootstrap:
