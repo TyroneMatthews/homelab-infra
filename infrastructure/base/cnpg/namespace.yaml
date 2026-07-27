@@ -3,4 +3,4 @@ kind: Namespace
 metadata:
   name: cnpg-system
   labels:
-    app.kubernetes.io/part-of: cnpg
+    app.kubernetes.io/name: cloudnative-pg
