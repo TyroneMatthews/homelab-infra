@@ -1,0 +1,32 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+spec:
+  gatewayClassName: cilium
+
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: vaultwarden.tmatthews.casa
+
+      allowedRoutes:
+        namespaces:
+          from: Same
+
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: vaultwarden.tmatthews.casa
+
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: vaultwarden-tls-cert
+            kind: Secret
+
+      allowedRoutes:
+        namespaces:
+          from: Same
