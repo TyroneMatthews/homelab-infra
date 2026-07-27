@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: vaultwarden-postgres
+  name: vaultwarden-postgresql
   namespace: vaultwarden
 spec:
   instances: 1 # Set to 2 or 3 for high availability (primary + standby replicas)
@@ -17,4 +17,4 @@ spec:
       database: vaultwarden
       owner: vaultwarden
       secret:
-        name: vaultwarden-db-app-user # Secret created by CNPG holding database credentials
+        name: vaultwarden-db-secret # Secret created by CNPG holding database credentials
