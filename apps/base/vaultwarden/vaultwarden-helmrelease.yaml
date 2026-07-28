@@ -28,6 +28,7 @@ spec:
       retries: 3
 
   values:
+    fullnameOverride: vaultwarden
     domain: "https://test-vaultwarden.tmatthews.casa"
 
     image:
@@ -52,8 +53,9 @@ spec:
     storage:
       data:
         enabled: true
-        size: 1Gi
+        size: 10Gi
         class: ugreen-nfs-sc
+        accessMode: ReadWriteOnly
         dataDir: /data
 
     service:
