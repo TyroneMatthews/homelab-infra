@@ -78,10 +78,10 @@ spec:
       timeoutSeconds: 5
       periodSeconds: 30
       successThreshold: 1
-      path: /alive
+      path: /
     readinessProbe:
       enable: true
-      path: /alive
+      path: /
       initialDelaySeconds: 10
       periodSeconds: 15
       timeoutSeconds: 5
