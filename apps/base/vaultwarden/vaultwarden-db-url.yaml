@@ -5,19 +5,19 @@ metadata:
     namespace: vaultwarden
 type: Opaque
 stringData:
-    database-url: ENC[AES256_GCM,data:4MZiPqZ1Wsav+4ZfPHF4RLbgmW1EJcC3wKmN0RCDvTAiRvpHUM3qVq4Kp04xI3NTYMoFzObJ3H5GxiGnQQW1kIZnzVp+0tcgmPn70+2pJ00eRtpQIaYYrrjtzCu6s+Ld9Ba/nEOAyV4uloms,iv:EheXYzSIQdzLlkQe7iapXMWG41j1iZ16p7zbBWpj81U=,tag:eKapvMy5ij36G7WrLy6mbw==,type:str]
+    database-url: ENC[AES256_GCM,data:Dj3nPG7Cc1uWRmDhnmRo/Mi6BxnqPsMoDiR3Kqmu9sVo0zr0c+td6QJY1FXMdZYY8IqQt1w8ScPgZ3N2JYHjxUs/Ha3JcbgRYjGsFpJrJ4YXRdcHCfFs6iB2an1A9ELT9in74zA+4Ytewj65iDE=,iv:5/IcCFvgz09UKCUpu9fIeMLzvPiBTGBDzAy6lhjCs9M=,tag:7BcV9U8xx35VndKKmEirAw==,type:str]
 sops:
     age:
         - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvZGd5cmZZdlRldThEQ2p2
-            Z2J5MlNpRmZvTUs0YndxM0xNVHYySW5XMTBFClFpQk5ZeitiUE40Q0pDb1BaUjRv
-            anBHdjF6SmFobU1SMFRzNUhNK3ZmcHcKLS0tIElUQy85K0tnbUVLTGFVLzFNRGd1
-            dVo3YlNUb1N2a1BselVGU2g2V3NvVUUKIIzCCRUlB+zUXJv+ax6YSCF0sLZFvIZp
-            WMBIGYRHO4Snfa7MvTLuMnPRBseb8Dr6o1o8xwA70aJKxqeYxIKh5Q==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUNDNhZ2hUZXR0Ykp5YkZC
+            TFhHbTNYVUsyN3VWdmh1TFZaNm05bkFvVHhJCm8vdmtyRjlmeXRFQWJDNDd6aUdu
+            VzdWOGR3TEI4a1JXMXcybXhCZHhsTVkKLS0tIG1SN2xRVDU0ejc3OTRRWlRqT2pa
+            MVg3L0NNVlJGSmpjMmVtY0pCaXdtb2sKiVKD0YOiJ+zgpF9WkxbLHx7R0EtLzZPW
+            lwIPwmfCDsxvmygnA7aHwqMDYoUcUSm7/8cFLIYqHw58Qb2Vwf6T5w==
             -----END AGE ENCRYPTED FILE-----
           recipient: age19juhr3umucask0st9rncphwmgvuwlgwr7cyclyuahlpt5q65gussg93zec
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-07-28T02:01:06Z"
-    mac: ENC[AES256_GCM,data:DF3KQswogLephu7GWm2/1bwmHwhdW8WvoGbw9XuiPtKNiE64Adq987w8zFQcIdxJGVcrn6oqc7cIjTQhR0RAoMvKPjvTgsis6wtlx8fQIJn9Y5dvqs26xKPM2zH29cejEbUvlR7K4UrdP3+l2lRIzZ375P5nDT3oRL2lpMd9oJc=,iv:2U3liMiMZnVGTTx5Rxkxj3zKuzKWxIBbt/ko0H8R1lM=,tag:E3MqF2jUOPuLR0zEXZ07mQ==,type:str]
+    lastmodified: "2026-07-28T04:24:51Z"
+    mac: ENC[AES256_GCM,data:vOHt+pNE9G9xPnbztXXK6JFewY294bPrfHyUvbMdw6GkFvwgNRG4rt8qqSnaNKQGSQU8Q2tNtPfmkqA+b1pBr62BVZlinbbQDoIh2pjjaL+7MAqbRA739esXqudyy6T7OyV8PSaeX0i7XxIrlJEkgxeO5SoxBiaXHDDpSPrElxY=,iv:Ip8oytUGwdMcQMEnkfu2ofCnV5kq4pERNQbL8XkJunA=,tag:ce5PnuiVzjuyrgKT/gzJag==,type:str]
     version: 3.13.2
