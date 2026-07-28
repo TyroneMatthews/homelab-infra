@@ -1,8 +1,8 @@
   values:
     fullnameOverride: vaultwarden
-    domain: "https://tmatthews.casa"
+    domain: "https://vaultwarden.tmatthews.casa"
     image:
-      tag: "1.34.3"
+      tag: "1.36.0"
       
     # CORRECT CONFIG MAPPER FOR THIS HELM CHART
     vaultwarden:
