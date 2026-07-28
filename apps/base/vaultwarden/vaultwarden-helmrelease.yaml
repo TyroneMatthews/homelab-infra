@@ -52,11 +52,11 @@ spec:
 
     storage:
       data:
-        enabled: true
+        name: vaultwarden-data
         size: 10Gi
         class: ugreen-nfs-sc
-        accessMode: ReadWriteOnly
-        dataDir: /data
+        accessMode: ReadWriteOnce
+        path: /data
 
     service:
       type: ClusterIP
