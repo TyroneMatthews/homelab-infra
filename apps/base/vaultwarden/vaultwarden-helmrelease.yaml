@@ -6,8 +6,8 @@ metadata:
 spec:
   interval: 30m
 
-  dependsOn:
-    - name: vaultwarden-postgresql
+  # dependsOn:
+  #   - name: vaultwarden-postgresql
 
   chart:
     spec:
