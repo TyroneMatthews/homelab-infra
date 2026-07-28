@@ -1,34 +1,12 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
-metadata:
-  name: vaultwarden
-  namespace: vaultwarden
-spec:
-  interval: 30m
-  chart:
-    spec:
-      chart: vaultwarden
-      version: "0.43.x"
-      sourceRef:
-        kind: HelmRepository
-        name: vaultwarden
-        namespace: vaultwarden
-      interval: 1h
-  install:
-    remediation:
-      retries: 3
-  upgrade:
-    remediation:
-      retries: 3
   values:
     fullnameOverride: vaultwarden
     domain: "https://tmatthews.casa"
     image:
       tag: "1.34.3"
       
-    # 1. ADD EXTRA ENVIRONMENT VARIABLES HERE
-    env:
-      ROCKET_PORT: "8080"            # Forces Vaultwarden to internal port 8080
+    # CORRECT CONFIG MAPPER FOR THIS HELM CHART
+    vaultwarden:
+      ROCKET_PORT: "8080"
     
     websocket:
       enabled: true
@@ -49,12 +27,9 @@ spec:
         class: ugreen-nfs-sc
         accessMode: ReadWriteOnce
         path: /data
-        
-    # 2. UPDATE SERVICE TO EXPECT PORT 8080 CONTEXT
     service:
       type: ClusterIP
-      port: 8080                     # Maps the service target to 8080
-      
+      port: 8080                     # Stays 8080 to match the app mapping
     ingress:
       enabled: false
     resources:
@@ -64,18 +39,16 @@ spec:
       limits:
         cpu: 500m
         memory: 512Mi
-        
-    # 3. PROBES NOW WORK ON / BECAUSE VAULTWARDEN IS LISTENING ON 8080
     livenessProbe:
       enabled: true
-      initialDelaySeconds: 20
+      initialDelaySeconds: 30        # Increased slightly to give app time to bind
       timeoutSeconds: 5
       periodSeconds: 30
       successThreshold: 1
-      path: /                        # Root path returns 200 OK on port 8080
+      path: /
     readinessProbe:
       enable: true
-      path: /                        # Root path returns 200 OK on port 8080
-      initialDelaySeconds: 10
+      path: /
+      initialDelaySeconds: 20        # Increased slightly to give app time to bind
       periodSeconds: 15
       timeoutSeconds: 5
