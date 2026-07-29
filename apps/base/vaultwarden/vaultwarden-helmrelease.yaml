@@ -32,8 +32,13 @@ spec:
     webVaultEnabled: true
     database:
       type: postgresql
-      existingSecret: vaultwarden-db-url
-      existingSecretKey: database-url
+      host: "vaultwarden-postgresql-rw.vaultwarden.svc.cluster.local"
+      port: "5432"
+      dbName: "vaultwarden"
+  # Point to the secret holding your credentials:
+      existingSecret: vaultwarden-db-secret
+      existingSecretUserKey: username
+      existingSecretPasswordKey: password
       connectionRetries: 30
       maxConnections: 10
     adminToken:
