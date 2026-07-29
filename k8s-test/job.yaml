@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: neb-new-job
+  namespace: neptune
+  labels:
+    id: awesome-job
+spec:
+  completions: 3
+  parallelism: 2
+  completionMode: Indexed # Required for the success policy
+  template:
+    metadata:
+      labels:
+        id: awesome-job
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: neb-new-job-container
+        image: busybox:1.31.0
+        command: ["sh"]
+        args:
+          - -c
+          - sleep 2 && echo "done"

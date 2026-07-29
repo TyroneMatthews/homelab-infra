@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mtu-vlan75-p03
+  namespace: mtu-test
+spec:
+  hostNetwork: true
+  nodeName: k8s-crtl-p03
+  containers:
+  - name: netshoot
+    image: nicolaka/netshoot
+    command: ["sleep", "3600"]
