@@ -6,3 +6,4 @@ resources:
   - traefik
   - cnpg
   - local-path-provisioner
+  - nfs-client
