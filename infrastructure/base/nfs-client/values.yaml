@@ -5,9 +5,12 @@ nfs:
     - nolock
     - nfsvers=3
     - tcp
+
 storageClass:
   create: true
   name: ugreen-nfs-sc
   reclaimPolicy: Retain
   archiveOnDelete: true
   allowVolumeExpansion: true
+  accessModes: ReadWriteOnce
+  volumeBindingMode: Immediate
