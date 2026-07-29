@@ -14,7 +14,7 @@ spec:
   chart:
     spec:
       chart: vaultwarden
-      version: "0.43.x"
+      version: "0.44.x"
       sourceRef:
         kind: HelmRepository
         name: vaultwarden
@@ -24,7 +24,7 @@ spec:
     fullnameOverride: vaultwarden
     domain: "https://vaultwarden.tmatthews.casa"
     image:
-      tag: "1.36.0"
+      tag: "1.37.0"
     env:
       ROCKET_PORT: "8080"
     websocket:
