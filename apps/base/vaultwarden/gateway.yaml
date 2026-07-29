@@ -6,6 +6,10 @@ metadata:
 spec:
   gatewayClassName: cilium
 
+  infrastructure:
+    labels:
+      bgp-advertise: "true"
+      
   listeners:
     - name: http
       protocol: HTTP
