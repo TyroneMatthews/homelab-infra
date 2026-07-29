@@ -99,16 +99,16 @@ autoscaling:
   # See EXAMPLES.md for more details.
   enabled: false
   
-persistence:
-  # -- Enable persistence using Persistent Volume Claims
-  # ref: http://kubernetes.io/docs/user-guide/persistent-volumes/.
-  # It can be used to store TLS certificates along with `certificatesResolvers.<name>.acme.storage`  option
-  enabled: true
-  name: data
-  accessMode: ReadWriteOnce
-  size: 128Mi
-  storageClass: ugreen-nfs-sc
-  path: /data
+# persistence:
+#   # -- Enable persistence using Persistent Volume Claims
+#   # ref: http://kubernetes.io/docs/user-guide/persistent-volumes/.
+#   # It can be used to store TLS certificates along with `certificatesResolvers.<name>.acme.storage`  option
+#   enabled: true
+#   name: data
+#   accessMode: ReadWriteOnce
+#   size: 128Mi
+#   storageClass: ugreen-nfs-sc
+#   path: /data
 
 # -- If hostNetwork is true, runs traefik in the host network namespace
 # To prevent unschedulable pods due to port collisions, if hostNetwork=true
