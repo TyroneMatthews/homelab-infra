@@ -8,7 +8,7 @@ data:
   config.yaml: |
     ingress:
       - hostname: vaultwarden.tmatthews.casa
-        service: https://cilium-gateway-public-gateway.vaultwarden.svc.cluster.local
+        service: https://192.168.40.3
         originRequest:
           originServerName: vaultwarden.tmatthews.casa
           noTLSVerify: true
