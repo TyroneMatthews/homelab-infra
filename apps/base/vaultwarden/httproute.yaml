@@ -5,8 +5,8 @@ metadata:
   namespace: vaultwarden
 spec:
   parentRefs:
-    - name: vaultwarden
-      sectionName: https
+  - name: public-gateway
+    sectionName: https
 
   hostnames:
     - vaultwarden.tmatthews.casa
