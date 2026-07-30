@@ -11,6 +11,6 @@ data:
         service: https://192.168.40.3
         originRequest:
           originServerName: vaultwarden.tmatthews.casa
-          noTLSVerify: true
+          noTLSVerify: false
 
       - service: http_status:404
