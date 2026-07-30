@@ -10,6 +10,7 @@ data:
       - hostname: vaultwarden.tmatthews.casa
         service: https://cilium-gateway-public-gateway.vaultwarden.svc.cluster.local
         originRequest:
+          originServerName: vaultwarden.tmatthews.casa
           noTLSVerify: true
 
       - service: http_status:404
