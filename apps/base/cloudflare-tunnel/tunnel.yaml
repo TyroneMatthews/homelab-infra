@@ -34,6 +34,8 @@ spec:
             - tunnel
             - --protocol
             - http2
+            - --config
+            - /etc/cloudflared/config.yaml
             - --no-autoupdate
             - --loglevel
             - info
@@ -49,3 +51,23 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 4
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-config
+  namespace: default
+data:
+  config.yaml: |
+  ingress:
+    - hostname: vaultwarden.tmatthews.casa
+      service: https://192.168.40.2
+      originRequest:
+        noTLSVerify: true
+
+    - service: http_status:404
+
+  volumeMounts:
+  - name: config
+    mountPath: /etc/cloudflared
