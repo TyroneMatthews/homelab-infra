@@ -51,7 +51,9 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 4
-
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -60,14 +62,11 @@ metadata:
   namespace: default
 data:
   config.yaml: |
-  ingress:
-    - hostname: vaultwarden.tmatthews.casa
-      service: https://192.168.40.2
-      originRequest:
-        noTLSVerify: true
+    # The hostname to expose the service on.
+    ingress:
+      - hostname: vaultwarden.tmatthews.casa
+        service: https://cilium-gateway-vaultwarden.vaultwarden.svc.cluster.local
+        originRequest:
+          noTLSVerify: true
 
-    - service: http_status:404
-
-  volumeMounts:
-  - name: config
-    mountPath: /etc/cloudflared
+      - service: http_status:404
