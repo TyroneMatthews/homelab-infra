@@ -32,6 +32,7 @@ spec:
             # Configures tunnel run parameters
             - cloudflared
             - tunnel
+            - --protocol
             - http2
             - --no-autoupdate
             - --loglevel
@@ -45,6 +46,6 @@ spec:
               # it has an active connection to Cloudflare's network.
               path: /ready
               port: 2000
-            failureThreshold: 1
             initialDelaySeconds: 30
             periodSeconds: 10
+            failureThreshold: 4
