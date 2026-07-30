@@ -6,7 +6,7 @@ metadata:
 spec:
   parentRefs:
   - name: public-gateway
-    sectionName: https
+    sectionName: http
 
   hostnames:
     - vaultwarden.tmatthews.casa
