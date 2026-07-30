@@ -4,7 +4,7 @@ metadata:
   name: vaultwarden-postgresql
   namespace: vaultwarden
 spec:
-  instances: 1 # Set to 2 or 3 for high availability (primary + standby replicas)
+  instances: 2 # Set to 2 or 3 for high availability (primary + standby replicas)
   
   # Storage configuration
   storage:
