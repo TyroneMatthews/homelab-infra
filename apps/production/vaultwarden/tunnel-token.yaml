@@ -2,20 +2,21 @@ apiVersion: v1
 kind: Secret
 metadata:
     name: tunnel-token
+    namespace: default
 stringData:
-    token: ENC[AES256_GCM,data:6XGxk3abxHYQv5A5FdlyNIXQuI2PDksGU6qsY0sNXMkgs82pqh/PShKkW+x633R4+5xyIBgJeyDIQXNCXtuGQq2/lz964ozFrpu9+qnjwawSApc0te/EXlCCeAlvZB3TIXouw9svkR8aVER61FBAlYgDufjZIkUm+/r3SUpXhl7vVofvs9tCUM4QK83Q8MJjUnF3+GoOxY9qyE+y1AIyCa2XgowdNSkiReyIDszVUooAD9OT4mlzzm1RHd4+ha+Fuv+Ey7N8X62Ad46I//b42xmDUOv+jC9TGzcz5AfkwWZ0otv5CSVsBST0Z5M=,iv:v+BcQi5QLATtPdCE+fcVkescNseeVtrg+n9Ib+ufmF4=,tag:EGPL+IbeJ0Lirktz2k+4fw==,type:str]
+    token: ENC[AES256_GCM,data:P8R8O7MO9Vns0unD0vu32yy3TmdY+Cvb4B6rDNMHXXzS5qfXmmApILD+lUrMn9D3JIlpleMQhzFJ0H3dnQgJB/lXtGw9yBYDdbhyDXIxHfKZbbPvEEhNVN4oVpetmjYCIdUUK2oacaVNPP6Ozfme5+DXe0Qk8ZzvpIGu1T6hU+ufCndWjt2j0oQiwT6agxCxiIKMKpvFGd6WwQTbPWCbnAoV4ix7IXRiw8Pbh0eOs4h4KYEbj+U77OOGWem3FQ/FE1HUbkjQtwnftF9d6+Tupz6os/Ffy6MjK5w8XtIGYgt6yzplFSmxXHp0DOU=,iv:vJxJoRTPf/F5mqeDogmiPOwSLP723KttW8thttuxwuw=,tag:s/r0Y3r00wlrCPGcqqzkPg==,type:str]
 sops:
     age:
         - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2eFNQNnQ2WjB6WUZGdnl3
-            WmROTFB0bG0zOWRFWXp6V0VyamUzU1FqUFc4CkhDQk1vUmdLUytMeis5KzZtcTZ5
-            b2owVDdBb21jQ1E2ZkxUVlNTMFNlbm8KLS0tIHY0YlNRMnJ0ZEk3aDY3NS9sdjFp
-            bDR0aTdWLzlmOE43ODRSeDRhTWEvbWsK2yD2xv92Yufnmc5AAMHfimLEM8FoYJeU
-            BumYcH69QPW3DOQpdxUelxbOzYTW7fCIZSIfS0GHfhHJ5s7K3t8wew==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4dFRBUWFjclBJdnZLemt1
+            VkNsbURYUzExWW1HNEZYZVJoR3FzWXRXSG1BCkhVTEZKV2JYMzdLb1FrblBFQVlS
+            TDN0QW9OSllHUndSOGtaeWx2R3NIMGMKLS0tIGNHN1BOUmVNdk9RblZaQTNMNzcx
+            YnJ1eWNrazNvcFlPZTV4QThRd0djZ00KI8stfKMD47OxKLWriJoF0iKE6JGMvVhl
+            QfHlS3uvgxlxoCJveC+3GmYyGsJSHg2hav8dmERxdDAcLBuJo6M+uw==
             -----END AGE ENCRYPTED FILE-----
           recipient: age19juhr3umucask0st9rncphwmgvuwlgwr7cyclyuahlpt5q65gussg93zec
     encrypted_regex: ^(data|stringData)$
-    lastmodified: "2026-07-30T01:28:02Z"
-    mac: ENC[AES256_GCM,data:WAlo+vKW5THHeQlCyCZ3T6X8druxX243CJABXu0hfQvryOmjm46DIHCWk6r5X1m3+hOZiAyMZrzOBGOB4YrIRWs8Xh4hwed4raKSxshrc9YmBRNzgwGTKqoVBreklkspBylEkDmXvq6kpsU181H7iwcnd93jTFddv1OQz5NetTE=,iv:RS9AvVAtbHQzXGwIs08MNB4NLEXq0xAv1u44Xsg5qyE=,tag:yrdoKR2RL2PvWCMrshvwYA==,type:str]
+    lastmodified: "2026-07-30T01:37:25Z"
+    mac: ENC[AES256_GCM,data:dvX5NxrW55fjwInlnZlYd2GO8fyW75pYrFRUcfGYanbSUL6bse3Ny/wSbX4zgoNdc479ngbznF7a2lsZVGYJlJsOa/My3SmojzS6PQ8cmSgGX6RdM0RvRJwAeXE/5fLz0o+Nd4uAPMmhq9MWo+9CAz26eYV/ewsGV6ME8dymLPs=,iv:0+6Aczn3EcOW80sNQk6wdlP2CctBXeGEfQ63a4rfvlo=,tag:b+h3U4KabmjWUWysBVIImg==,type:str]
     version: 3.13.2
