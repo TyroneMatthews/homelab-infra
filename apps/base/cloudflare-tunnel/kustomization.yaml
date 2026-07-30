@@ -3,4 +3,7 @@ kind: Kustomization
 namespace: default
 
 resources:
-  - tunnel.yaml
+  - namespace.yaml
+  - secret.yaml
+  - configmap.yaml
+  - deployment.yam

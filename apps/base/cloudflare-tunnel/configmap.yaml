@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-config
+  namespace: cloudflared
+
+data:
+  config.yaml: |
+    ingress:
+      - hostname: vaultwarden.tmatthews.casa
+        service: https://cilium-gateway-public.gateway-system.svc.cluster.local
+        originRequest:
+          noTLSVerify: true
+
+      # Catch anything not matched above
+      - service: http_status:404
