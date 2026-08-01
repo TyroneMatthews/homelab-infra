@@ -60,8 +60,3 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
-
-  valuesFrom:
-    - kind: ConfigMap
-      name: nfs-client-values
-      valuesKey: values.yaml
