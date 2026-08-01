@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: traefik-values
   namespace: traefik
+
 data:
   values.yaml: |
     # -- Additional command arguments to be passed to all traefik's pods
