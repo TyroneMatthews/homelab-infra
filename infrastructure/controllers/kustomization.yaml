@@ -7,3 +7,12 @@ resources:
   - local-path-provisioner.yaml
   - nfs-client.yaml
   - traefik.yaml
+
+
+configMapGenerator:
+  - name: traefik-values
+    namespace: traefik
+    options:
+      disableNameSuffixHash: true
+    files:
+      - values.yaml=traefik-values.yaml
