@@ -6,5 +6,12 @@ resources:
   - cloudnative-pg.yaml
   - local-path-provisioner.yaml
   - nfs-client.yaml
+  - nfs-client-values.yaml
   - traefik.yaml
-  
+
+configMapGenerator:
+  - name: traefik-values
+    options:
+      disableNameSuffixHash: true
+    files:
+      - values.yaml=./configs/traefik/production-traefik-values.yaml
