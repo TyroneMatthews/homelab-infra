@@ -84,13 +84,13 @@ gatewayClass:
 
 ports:
   http:                      # Changed from 'web' to 'http'
-    port: 8000
+    port: 80
     expose:
       default: true
     exposedPort: 80
   https:                     # Changed from 'websecure' to 'https'
     asDefault: true
-    port: 8443
+    port: 443
     expose:
       default: true
     exposedPort: 443
