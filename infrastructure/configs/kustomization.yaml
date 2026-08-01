@@ -4,5 +4,3 @@ kind: Kustomization
 resources:
   - cert-manager
   - traefik
-  - cnpg
-  - local-path-provisioner
