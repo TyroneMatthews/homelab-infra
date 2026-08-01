@@ -8,10 +8,6 @@ data:
   config.yaml: |
     ingress:
       - hostname: vaultwarden.tmatthews.casa
-        service: https://cilium-gateway-public-gateway.vaultwarden.svc.cluster.local
-        # service: https://192.168.40.3
-        originRequest:
-          originServerName: vaultwarden.tmatthews.casa
-          noTLSVerify: false
+        service: http://traefik.traefik.svc.cluster.local:80
 
       - service: http_status:404

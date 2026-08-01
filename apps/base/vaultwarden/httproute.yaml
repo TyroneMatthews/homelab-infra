@@ -18,5 +18,5 @@ spec:
             value: /
 
       backendRefs:
-        - name: vaultwarden
+        - name: vaultwarden-svc
           port: 80
