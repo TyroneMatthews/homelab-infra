@@ -83,16 +83,12 @@ gatewayClass:
   name: traefik
 
 ports:
-  web:
+  http:                      # Changed from 'web' to 'http'
     port: 8000
-    # hostPort: 8000
-    # containerPort: 8000
     expose:
       default: true
     exposedPort: 80
-
-  websecure:
-    ## -- Enable this entrypoint as a default entrypoint. When a service doesn't explicitly set an entrypoint it will only use this entrypoint.
+  https:                     # Changed from 'websecure' to 'https'
     asDefault: true
     port: 8443
     expose:
