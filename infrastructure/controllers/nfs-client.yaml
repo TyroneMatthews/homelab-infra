@@ -32,6 +32,25 @@ spec:
         kind: HelmRepository
         name: nfs-client-provisioner
         namespace: nfs-provisioner
+    
+  values:
+      nfs:
+        server: 192.168.75.250
+        path: /volume1/k8s
+        mountOptions:
+          - nolock
+          - nfsvers=3
+          - tcp
+
+      storageClass:
+        create: true
+        name: ugreen-nfs-sc
+        reclaimPolicy: Retain
+        archiveOnDelete: true
+        allowVolumeExpansion: true
+        accessModes:
+          - ReadWriteOnce
+        volumeBindingMode: Immediate
 
   install:
     remediation:
