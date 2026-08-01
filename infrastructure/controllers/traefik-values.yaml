@@ -90,8 +90,8 @@ ports:
     ## -- Enable this entrypoint as a default entrypoint. When a service doesn't explicitly set an entrypoint it will only use this entrypoint.
     asDefault: true
     port: 8443
-    # expose:
-    #   default: true
+    expose:
+      default: true
     exposedPort: 443
 
 autoscaling:
