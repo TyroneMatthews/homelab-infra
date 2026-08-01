@@ -6,7 +6,6 @@ resources:
   - cloudnative-pg.yaml
   - local-path-provisioner.yaml
   - nfs-client.yaml
-  - nfs-client-values.yaml
   - traefik.yaml
 
 configMapGenerator:
