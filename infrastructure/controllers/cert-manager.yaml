@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  interval: 1h
+  url: https://charts.jetstack.io # or oci://registry-1.docker.io/bitnamicharts/cert-manager
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: cert-manager
+      version: "1.21.0" # Use whatever version you need
+      sourceRef:
+        kind: HelmRepository
+        name: cert-manager
+
+  install:
+    crds: CreateReplace
+
+  upgrade:
+    crds: CreateReplace
+
+  values:
+    crds:
+      enabled: true
+    extraArgs:
+      - --dns01-recursive-nameservers-only
+      - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
