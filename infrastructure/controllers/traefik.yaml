@@ -32,10 +32,10 @@ spec:
         name: traefik
         namespace: traefik
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: traefik-values
-      valuesKey: values.yaml
+  # valuesFrom:
+  #   - kind: ConfigMap
+  #     name: traefik-values
+  #     valuesKey: values.yaml
 
   install:
     createNamespace: true
