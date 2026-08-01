@@ -69,13 +69,18 @@ providers:  # @schema additionalProperties: false
     publishedService:
       enabled: true
       pathOverride: "traefik/traefik"
+  kubernetesGateway:
+    enabled: true
 
 log:
   level: "INFO"
 
-accessLog:
-  # -- To enable access logs
+gateway:
+  enabled: false
+
+gatewayClass:
   enabled: true
+  name: traefik
 
 ports:
   web:
