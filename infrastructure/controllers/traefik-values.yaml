@@ -83,12 +83,12 @@ gatewayClass:
   name: traefik
 
 ports:
-  http:                      # Changed from 'web' to 'http'
+  web:
     port: 80
     expose:
       default: true
     exposedPort: 80
-  https:                     # Changed from 'websecure' to 'https'
+  websecure:
     asDefault: true
     port: 443
     expose:
