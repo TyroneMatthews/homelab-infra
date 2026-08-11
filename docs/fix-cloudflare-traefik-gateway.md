@@ -31,9 +31,115 @@ This branch moves Vaultwarden from the existing Cilium Gateway API path into a T
 - The Tunnel origin should be HTTP to Traefik, not HTTPS to the old Cilium gateway service.
 - Vaultwarden TLS termination is handled by the Traefik Gateway HTTPS listener using `vaultwarden-tls-cert`.
 
+## Troubleshooting guide
+
+### 1. Verify Traefik values and Gateway entry points
+- Check `infrastructure/controllers/traefik-values.yaml`.
+- Confirm `providers.kubernetesGateway.enabled: true`.
+- Confirm the chart uses `ports.web` and `ports.websecure`, not `ports.http` or `ports.https`:
+```yaml
+ports:
+  web:
+    port: 80
+    expose:
+      default: true
+    exposedPort: 80
+  websecure:
+    asDefault: true
+    port: 443
+    expose:
+      default: true
+    exposedPort: 443
+```
+- If Traefik reports missing entry points for port 80/443, the values file is the primary suspect.
+
+### 2. Confirm Gateway API CRDs
+- Run:
+```bash
+kubectl api-resources --api-group=gateway.networking.k8s.io
+kubectl get crd gatewayclasses.gateway.networking.k8s.io gateways.gateway.networking.k8s.io httproutes.gateway.networking.k8s.io tlsroutes.gateway.networking.k8s.io referencegrants.gateway.networking.k8s.io grpcroutes.gateway.networking.k8s.io -o jsonpath='{range .items[*]}{.metadata.name} {range .spec.versions[*]}{.name}:{.served}:{.storage} {end}\n{end}'
+```
+- Make sure the cluster has supported `v1` versions for:
+  - `GatewayClass`
+  - `Gateway`
+  - `HTTPRoute`
+  - `TLSRoute`
+  - `BackendTLSPolicy`
+  - `ReferenceGrant`
+  - `GRPCRoute`
+- If versions are missing, install or upgrade the Gateway API CRDs before debugging Traefik.
+
+### 3. Inspect the Gateway and HTTPRoute definitions
+- Run:
+```bash
+kubectl get gateway,httproute,tlsroute -A
+kubectl describe gateway -n vaultwarden public-gateway
+kubectl describe httproute -n vaultwarden vaultwarden
+```
+- Confirm the Gateway listeners are:
+  - `protocol: HTTP`, `port: 80`, `name: http`
+  - `protocol: HTTPS`, `port: 443`, `name: https`
+- Confirm `HTTPRoute` parentRefs match `public-gateway` and `sectionName: https`.
+- Confirm the `backendRef` points to `vaultwarden` service port `80`.
+
+### 4. Check Traefik logs for Gateway provider startup
+- Run:
+```bash
+kubectl logs -n traefik deployment/traefik | grep -i gateway
+```
+- Look for:
+  - `Starting provider *gateway.Provider`
+  - `Creating in-cluster Provider client`
+  - `cannot find entryPoint for Gateway`
+- If the provider starts successfully and the Gateway is accepted, Traefik is configured correctly.
+
+### 5. Render the Helm manifest for Traefik
+- Run:
+```bash
+helm template traefik traefik/traefik --version 41.0.2 -f infrastructure/controllers/traefik-values.yaml --namespace traefik
+```
+- Confirm the rendered Service ports are only `80/web` and `443/websecure`.
+- Confirm the rendered Deployment container ports are only `80/web` and `443/websecure` on the Traefik container.
+- If duplicates remain, the values file still contains invalid keys.
+
+### 6. Reconcile or restart Traefik
+- If using Flux:
+```bash
+flux reconcile helmrelease traefik -n traefik
+flux get helmreleases -n traefik
+kubectl describe hr -n traefik traefik | tail -n 40
+```
+- If using kubectl directly:
+```bash
+kubectl rollout restart deployment/traefik -n traefik
+```
+
+### 7. Validate the Tunnel route
+- Check Cloudflare Tunnel config in `apps/base/cloudflare-tunnel/configmap.yaml`:
+```yaml
+ingress:
+  - hostname: vaultwarden.tmatthews.casa
+    service: http://traefik.traefik.svc.cluster.local:80
+  - service: http_status:404
+```
+- Confirm the `cloudflared` deployment is running and connected.
+- Use a debug pod to test internal connectivity if the tunnel pod has no shell:
+```bash
+kubectl run -n cloudflared debug --rm -i --tty --image=alpine -- ash
+apk add --no-cache curl
+curl -v -H 'Host: vaultwarden.tmatthews.casa' http://traefik.traefik.svc.cluster.local:80/
+```
+
+### 8. External validation
+- Test the public hostname via Cloudflare:
+```bash
+curl -v https://vaultwarden.tmatthews.casa/
+```
+- If the hostname is not reachable, confirm Cloudflare Tunnel DNS and tunnel route configuration on the Cloudflare dashboard.
+
 ## Next steps
 - Deploy the branch and confirm the Traefik Gateway status object is accepted.
-- Verify `Gateway` and `HTTPRoute` status conditions in `vaultwarden` namespace.
+- Verify `Gateway` and `HTTPRoute` status conditions in the `vaultwarden` namespace.
 - Confirm Cloudflare Tunnel can reach Traefik successfully and route `vaultwarden.tmatthews.casa`.
 - After validation, remove any unused Cilium Gateway objects if still present.
 
