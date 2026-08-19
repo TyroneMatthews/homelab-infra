@@ -71,6 +71,10 @@ providers:  # @schema additionalProperties: false
       pathOverride: "traefik/traefik"
   kubernetesGateway:
     enabled: true
+    statusAddress:         # <-- ADD THIS
+      service:             # <-- ADD THIS
+        name: traefik      # <-- ADD THIS
+        namespace: traefik # <-- ADD THIS
 
 log:
   level: "INFO"
