@@ -52,6 +52,7 @@ spec:
         accessMode: ReadWriteOnce
         path: /data
     service:
+      enabled: true
       type: ClusterIP
       port: 8080
     ingress:
