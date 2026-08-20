@@ -24,7 +24,7 @@ spec:
     fullnameOverride: vaultwarden
     domain: "https://vaultwarden.tmatthews.casa"
     image:
-      tag: "1.37.0"
+      tag: "1.37.1"
     env:
       ROCKET_PORT: "8080"
     websocket:
