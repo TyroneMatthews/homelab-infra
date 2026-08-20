@@ -29,7 +29,7 @@ This branch moves Vaultwarden from the existing Cilium Gateway API path into a T
 
 ## Notes
 - The Tunnel origin uses Traefik's internal HTTPS Service with `originServerName` and `httpHostHeader` set to `vaultwarden.tmatthews.casa`.
-- Vaultwarden TLS termination is handled by the Traefik Gateway HTTPS listener using `vaultwarden-tls-cert`.
+- Vaultwarden TLS termination is handled by the Traefik Gateway HTTPS listener using `wildcard-tmatthews-casa-tls`.
 
 ## Troubleshooting guide
 
