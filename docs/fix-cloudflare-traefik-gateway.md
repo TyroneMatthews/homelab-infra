@@ -13,9 +13,9 @@ This branch moves Vaultwarden from the existing Cilium Gateway API path into a T
 - Enabled `providers.kubernetesGateway.enabled: true` in `infrastructure/controllers/traefik-values.yaml`.
 - Kept `providers.kubernetesCRD` and `providers.kubernetesIngress` enabled to preserve existing Traefik compatibility.
 - Left `gateway.enabled: false` and created a managed `gatewayClass.name: traefik`.
-- Updated `apps/base/cloudflare-tunnel/configmap.yaml` to target Traefik at `http://traefik.traefik.svc.cluster.local:80`.
+- Updated `apps/base/cloudflare-tunnel/configmap.yaml` to target Traefik over HTTPS and preserve the Vaultwarden hostname for origin TLS and routing.
 - Changed `apps/base/vaultwarden/gateway.yaml` from `gatewayClassName: cilium` in `gateway-system` to `gatewayClassName: traefik` in the `vaultwarden` namespace.
-- Fixed `apps/base/vaultwarden/httproute.yaml` to route to `vaultwarden-svc`.
+- Fixed `apps/base/vaultwarden/httproute.yaml` to route to the Helm-managed `vaultwarden` Service on port `80`.
 
 ## Production overlay
 - `apps/production/vaultwarden/kustomization.yaml` currently imports `../../base/vaultwarden`.
@@ -28,7 +28,7 @@ This branch moves Vaultwarden from the existing Cilium Gateway API path into a T
 - `kustomize build infrastructure/controllers` ✅
 
 ## Notes
-- The Tunnel origin should be HTTP to Traefik, not HTTPS to the old Cilium gateway service.
+- The Tunnel origin uses Traefik's internal HTTPS Service with `originServerName` and `httpHostHeader` set to `vaultwarden.tmatthews.casa`.
 - Vaultwarden TLS termination is handled by the Traefik Gateway HTTPS listener using `vaultwarden-tls-cert`.
 
 ## Troubleshooting guide
@@ -119,7 +119,10 @@ kubectl rollout restart deployment/traefik -n traefik
 ```yaml
 ingress:
   - hostname: vaultwarden.tmatthews.casa
-    service: http://traefik.traefik.svc.cluster.local:80
+    service: https://traefik.traefik.svc.cluster.local:443
+    originRequest:
+      originServerName: vaultwarden.tmatthews.casa
+      httpHostHeader: vaultwarden.tmatthews.casa
   - service: http_status:404
 ```
 - Confirm the `cloudflared` deployment is running and connected.
@@ -146,8 +149,8 @@ curl -v https://vaultwarden.tmatthews.casa/
 ## PR checklist
 - [ ] Confirm `providers.kubernetesGateway.enabled` is set in `infrastructure/controllers/traefik-values.yaml`.
 - [ ] Confirm `apps/base/vaultwarden/gateway.yaml` uses `gatewayClassName: traefik` in namespace `vaultwarden`.
-- [ ] Confirm `apps/base/vaultwarden/httproute.yaml` routes to `vaultwarden-svc`.
-- [ ] Confirm `apps/base/cloudflare-tunnel/configmap.yaml` targets Traefik at `http://traefik.traefik.svc.cluster.local:80`.
+- [ ] Confirm `apps/base/vaultwarden/httproute.yaml` routes to `vaultwarden` Service port `80`.
+- [ ] Confirm `apps/base/cloudflare-tunnel/configmap.yaml` targets Traefik over HTTPS and sets the Vaultwarden origin hostname.
 - [ ] Run `kustomize build apps/base/vaultwarden` and `kustomize build apps/base/cloudflare-tunnel`.
 - [ ] Optional: review `apps/production/vaultwarden/kustomization.yaml` to ensure the new objects are included.
 - [ ] Open PR from `fix/cloudflare-traefik-gateway` and include this doc in the description.
