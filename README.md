@@ -52,26 +52,92 @@ An automated, declarative home lab environment powered by Kubernetes and GitOps.
 ```text
 
 Repository based on Flux documentation https://fluxcd.io/flux/guides/repository-structure/#repository-structure
+
 .
-├── clusters/
-│   └── production/             # Flux cluster entry point & root manifests
-│       ├── flux-system/        # Flux controller components & Git repository sync config
-│       ├── infrastructure.yaml # Kustomization pointing to core infra controllers
-│       └── apps.yaml           # Kustomization pointing to application workloads
+├── clusters/                                   # Flux cluster entry point & root manifests
+│   └── production/
+│       ├── apps.yaml                           # Kustomization pointing to application workloads
+│       ├── gateway-api.yaml                    # Gateway API Custom Resource Definitions & setup
+│       ├── infrastructure.yaml                 # Kustomization pointing to core infra controllers
+│       ├── kustomization.yaml                  # Root kustomization for the production cluster
+│       └── flux-system/                        # Flux controller components & Git repository sync config
+│           ├── gotk-components.yaml            # Flux core controllers (source, kustomize, helm, notification)
+│           ├── gotk-sync.yaml                  # GitRepository and Kustomization defining the root sync
+│           └── kustomization.yaml              # Kustomization for the flux-system components
 │
-├── infrastructure/             # Core cluster controllers & platform services
-│   ├── base/                   # Environment-agnostic Helm releases & repositories
-│   │   ├── cert-manager/       # Automated TLS certificate management
-│   │   └── traefik/            # Edge ingress controller
-│   ├── production/             # Environment-specific overrides & custom resources
-│   │   ├── cert-manager/       # Let's Encrypt ClusterIssuers & wildcard cert definitions
-│   │   └── traefik/            # Traefik Helm values, TLS stores & dashboard routes
-│   └── staging/                # Staging overlays (prepared for future expansion)
+├── infrastructure/                             # Core cluster controllers & platform services
+│   ├── base/                                   # Environment-agnostic platform components
+│   │   └── gateway-api/
+│   │       ├── gateway-api-v1.5.1.yaml         # Gateway API manifests
+│   │       └── kustomization.yaml              # Kustomization for Gateway API base
+│   ├── configs/                                # Environment-agnostic configurations & operators configs
+│   │   ├── cert-manager/                       # Automated TLS certificate management configs
+│   │   │   ├── cloudflare-api-token.yaml
+│   │   │   ├── clusterissuer-production.yaml
+│   │   │   ├── kustomization.yaml
+│   │   │   ├── traefik-wildcard.yaml
+│   │   │   └── wildcard-cert.yaml
+│   │   ├── cnpg/                               # CloudNativePG configurations
+│   │   │   └── kustomization.yaml
+│   │   ├── local-path-provisioner/             # Local storage provisioner configs
+│   │   │   └── kustomization.yaml
+│   │   ├── traefik/                            # Edge ingress controller configurations
+│   │   │   ├── dashboard-ingress.yaml
+│   │   │   ├── kustomization.yaml
+│   │   │   └── tlsStore.yaml
+│   │   └── kustomization.yaml                  # Root kustomization for infrastructure configs
+│   └── controllers/                            # Core infrastructure controller manifests & Helm releases
+│       ├── cert-manager.yaml
+│       ├── cloudnative-pg.yaml
+│       ├── kustomization.yaml
+│       ├── local-path-provisioner.yaml
+│       ├── nfs-client.yaml
+│       ├── traefik.yaml
+│       └── traefik-values.yaml
 │
-└── apps/                       # User-facing applications & stateful workloads
-    ├── base/                   # Core application manifests (Deployments, Services, PVCs)
-    │   ├── linkding/           # Bookmark manager base setup
-    │   └── vaultwarden/        # Password manager base setup
-    ├── production/             # Production overlays (IngressRoutes, Certs, custom routes)
-    │   └── vaultwarden/        # Traefik IngressRoute & TLS cert binding
-    └── staging/                # Staging application overlays
+├── apps/                                       # User-facing applications & stateful workloads
+│   ├── base/                                   # Core application manifests (Deployments, Services, PVCs)
+│   │   ├── cloudflare-tunnel/                  # Cloudflare tunnel base setup
+│   │   │   ├── configmap.yaml
+│   │   │   ├── deployment.yaml
+│   │   │   ├── kustomization.yaml
+│   │   │   └── namespace.yaml
+│   │   ├── linkding/                           # Bookmark manager base setup
+│   │   └── vaultwarden/                        # Password manager base setup
+│   │       ├── deployment.yaml
+│   │       ├── gateway.yaml
+│   │       ├── httproute.yaml
+│   │       ├── https-redirect.yaml
+│   │       ├── kustomization.yaml
+│   │       ├── namespace.yaml
+│   │       ├── postgres-cluster.yaml
+│   │       ├── pvc.yaml
+│   │       ├── vaultwarden-db-secret.yaml
+│   │       ├── vaultwarden-db-url.yaml
+│   │       ├── vaultwarden-helmrelease.yaml
+│   │       ├── vaultwarden-helmrepository.yaml
+│   │       └── vw-secret.yaml
+│   └── production/                             # Production overlays & environment-specific values
+│       ├── cloudflare-tunnel/
+│       │   ├── kustomization.yaml
+│       │   └── tunnel-token.yaml
+│       ├── vaultwarden/                        # Traefik IngressRoute & TLS cert binding overrides
+│       │   ├── certificate.yaml
+│       │   ├── ingressroute.yaml
+│       │   └── kustomization.yaml
+│       └── kustomization.yaml                  # Root kustomization for production apps
+│
+├── docs/                                       # Operational documentation & runbooks
+│   ├── fix-cloudflare-traefik-gateway.md
+│   ├── recent-cloudflare-traefik-vaultwarden-runbook.md
+│   └── recent-cloudflare-traefik-vaultwarden-runbook.pdf
+│
+└── k8s-test/                                   # Temporary or ad-hoc cluster testing manifests
+    ├── job.yaml
+    ├── nfs-client-test.yaml
+    └── network-test/
+        ├── mtu-host-test.yaml
+        ├── mtu-vlan75-p02.yaml
+        ├── mtu-vlan75-p03.yaml
+        ├── mtuNamespace.yaml
+        └── test-bgp.yaml

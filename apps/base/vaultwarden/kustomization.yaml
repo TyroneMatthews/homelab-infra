@@ -9,7 +9,6 @@ resources:
   - postgres-cluster.yaml
   - vaultwarden-helmrepository.yaml
   - vaultwarden-helmrelease.yaml
-  - gateway.yaml
   - httproute.yaml
   - https-redirect.yaml
   - vw-secret.yaml

@@ -2,7 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: public-gateway
-  namespace: vaultwarden
+  namespace: traefik
 spec:
   gatewayClassName: traefik
 
@@ -17,7 +17,10 @@ spec:
       hostname: vaultwarden.tmatthews.casa
       allowedRoutes:
         namespaces:
-          from: Same
+          from: Selector
+          selector:
+            matchLabels:
+              app.kubernetes.io/part-of: vaultwarden
 
     - name: https
       protocol: HTTPS
@@ -26,8 +29,11 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: vaultwarden-tls-cert
+          - name: wildcard-tmatthews-casa-tls
             kind: Secret
       allowedRoutes:
         namespaces:
-          from: Same
+          from: Selector
+          selector:
+            matchLabels:
+              app.kubernetes.io/part-of: vaultwarden
