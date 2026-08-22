@@ -4,6 +4,10 @@ metadata:
   name: backblaze-creds
   namespace: flux-system
 spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 10m
   path: ./infrastructure/base/backblaze
   prune: true
