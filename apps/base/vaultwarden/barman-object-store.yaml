@@ -18,4 +18,4 @@ spec:
       compression: gzip
     data:
       compression: gzip
-    retentionPolicy: 30d
+  retentionPolicy: 30d
