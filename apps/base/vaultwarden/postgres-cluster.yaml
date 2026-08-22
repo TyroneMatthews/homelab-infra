@@ -18,3 +18,20 @@ spec:
       owner: vaultwarden
       secret:
         name: vaultwarden-db-secret # Secret created by CNPG holding database credentials
+
+  backup:
+    barmanObjectStore:
+      destinationPath: "s3://vwdb-backup/"
+      endpointURL: "https://s3.us-east-005.backblazeb2.com" # Prefix your B2 endpoint with https://
+      s3Credentials:
+        accessKeyId:
+          name: backblaze-b2-creds
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: backblaze-b2-creds
+          key: ACCESS_SECRET_KEY
+      wal:
+        compression: gzip
+      data:
+        compression: gzip
+    retentionPolicy: "30d" # Automatically prune backups older than 30 days
