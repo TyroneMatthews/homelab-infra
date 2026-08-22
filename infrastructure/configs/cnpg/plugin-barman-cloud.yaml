@@ -1,0 +1,126 @@
+# namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloudnative-pg
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: plugin-barman-cloud
+  namespace: cloudnative-pg
+spec:
+  interval: 1h
+  url: https://cloudnative-pg.github.io/charts 
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plugin-barman-cloud
+  namespace: cloudnative-pg
+spec:
+  dependsOn:
+    - name: cloudnative-pg
+      namespace: cloudnative-pg
+
+  interval: 30m
+
+  chart:
+    spec:
+      chart: plugin-barman-cloud
+      version: "0.7.1"
+      sourceRef:
+        kind: HelmRepository
+        name: plugin-barman-cloud
+        namespace: cloudnative-pg
+
+  values:
+    replicaCount: 1
+
+    image:
+      registry: ghcr.io
+      repository: cloudnative-pg/plugin-barman-cloud
+      pullPolicy: IfNotPresent
+      tag: ""
+
+    sidecarImage:
+      registry: ghcr.io
+      repository: cloudnative-pg/plugin-barman-cloud-sidecar
+      tag: ""
+
+    imagePullSecrets: []
+    nameOverride: ""
+    fullnameOverride: ""
+    namespaceOverride: ""
+
+    hostNetwork: false
+    dnsPolicy: ""
+
+    updateStrategy: {}
+
+    crds:
+      create: true
+
+    additionalArgs: []
+    additionalEnv: []
+
+    serviceAccount:
+      create: true
+      name: ""
+
+    rbac:
+      create: true
+      cnpgGroup: postgresql.cnpg.io
+
+    commonAnnotations: {}
+    podAnnotations: {}
+    podLabels: {}
+
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      runAsUser: 10001
+      runAsGroup: 10001
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+          - "ALL"
+
+    podSecurityContext:
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+
+    priorityClassName: ""
+
+    service:
+      name: barman-cloud
+      port: 9090
+      ipFamilyPolicy: ""
+      ipFamilies: []
+
+    resources:
+      # If you want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      #
+      limits:
+        cpu: 100m
+        memory: 200Mi
+      requests:
+        cpu: 100m
+        memory: 100Mi
+    nodeSelector: {}
+    topologySpreadConstraints: []
+    tolerations: []
+    affinity: {}
+
+    certificate:
+      createClientCertificate: true
+      createServerCertificate: true
+      createIssuer: true
+      issuerName: ""
+      duration: 2160h
+      renewBefore: 360h
