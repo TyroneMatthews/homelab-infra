@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-postgresql-pitr
+  namespace: vaultwarden
+
+spec:
+  instances: 1
+
+  storage:
+    size: 10Gi
+    storageClass: local-path
+
+  bootstrap:
+    recovery:
+      source: vaultwarden-backup
+
+      recoveryTarget:
+        targetTime: "2026-08-23T21:09:59-04:00"
+
+  externalClusters:
+    - name: vaultwarden-backup
+
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+
+        parameters:
+          barmanObjectName: vaultwarden-b2
+          serverName: vaultwarden-postgresql
