@@ -8,19 +8,34 @@ spec:
   
   # Storage configuration
   storage:
-    size: 5Gi
+    size: 10Gi
     storageClass: local-path # Adjust to your RWO storage class
 
   # Database initialization defaults
   bootstrap:
-    initdb:
-      database: vaultwarden
-      owner: vaultwarden
-      secret:
-        name: vaultwarden-db-secret # Secret created by CNPG holding database credentials
+    recovery:
+    #   initdb:
+    #     database: vaultwarden
+    #     owner: vaultwarden
+    #     secret:
+    #       name: vaultwarden-db-secret # Secret created by CNPG holding database credentials
+      source: vaultwarden-backup-pitr
 
-  # plugins:
-  #   - name: barman-cloud.cloudnative-pg.io
-  #     isWALArchiver: true
-  #     parameters:
-  #       barmanObjectName: vaultwarden-b2
+      # recoveryTarget:
+      #   targetTime: "2026-08-24T10:58:00"
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: vaultwarden-b2
+        serverName: vaultwarden-postgresql-restore         # distinct name for the PITR cluster, used to store WAL files in B2 bucket
+
+  externalClusters:
+    - name: vaultwarden-backup-pitr
+
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+
+        parameters:
+          barmanObjectName: vaultwarden-b2
+          serverName: vaultwarden-postgresql-pitr
