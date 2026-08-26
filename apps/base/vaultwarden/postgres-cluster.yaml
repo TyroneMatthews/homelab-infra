@@ -19,8 +19,8 @@ spec:
       secret:
         name: vaultwarden-db-secret # Secret created by CNPG holding database credentials
 
-  plugins:
-    - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
-      parameters:
-        barmanObjectName: vaultwarden-b2
+  # plugins:
+  #   - name: barman-cloud.cloudnative-pg.io
+  #     isWALArchiver: true
+  #     parameters:
+  #       barmanObjectName: vaultwarden-b2
