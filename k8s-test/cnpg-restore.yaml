@@ -16,7 +16,7 @@ spec:
       source: vaultwarden-backup
 
       recoveryTarget:
-        targetTime: "2026-08-23T21:09:59-04:00"
+        targetTime: "2026-08-24T10:58:00"
 
   externalClusters:
     - name: vaultwarden-backup

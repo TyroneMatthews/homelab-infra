@@ -32,7 +32,7 @@ spec:
     webVaultEnabled: true
     database:
       type: postgresql
-      host: "vaultwarden-postgresql-rw.vaultwarden.svc.cluster.local"
+      host: "vaultwarden-postgresql-pitr-rw.vaultwarden.svc.cluster.local"
       port: "5432"
       dbName: "vaultwarden"
   # Point to the secret holding your credentials:
