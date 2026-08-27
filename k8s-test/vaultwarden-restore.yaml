@@ -1,0 +1,35 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-postgresql
+  namespace: vaultwarden
+
+spec:
+  instances: 1
+
+  storage:
+    size: 10Gi
+    storageClass: local-path
+
+  bootstrap:
+    recovery:
+      source: vaultwarden-backup-pitr
+
+      # recoveryTarget:
+      #   targetTime: "2026-08-24T10:58:00"
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: vaultwarden-b2
+        serverName: vaultwarden-postgresql-restore         # distinct name for the PITR cluster, used to store WAL files in B2 bucket
+
+  externalClusters:
+    - name: vaultwarden-backup-pitr
+
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+
+        parameters:
+          barmanObjectName: vaultwarden-b2
+          serverName: vaultwarden-postgresql-pitr
