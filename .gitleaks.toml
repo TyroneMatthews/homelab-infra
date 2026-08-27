@@ -1,0 +1,8 @@
+# /root/homelab-infra/.gitleaks.toml
+[extend]
+useDefault = true
+
+[allowlist]
+  regexes = [
+    '''ENC\[AES256_GCM,data:.*?,iv:.*?,tag:.*?,type:.*?\]''',
+  ]

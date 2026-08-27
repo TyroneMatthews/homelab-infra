@@ -4,6 +4,8 @@ metadata:
   name: infra-controllers
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: gateway-api-crds
   interval: 10m
   path: ./infrastructure/controllers
   prune: true
@@ -22,6 +24,10 @@ metadata:
 spec:
   dependsOn:
     - name: infra-controllers
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
   interval: 1h
   retryInterval: 2m
   timeout: 5m

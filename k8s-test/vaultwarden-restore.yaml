@@ -3,22 +3,16 @@ kind: Cluster
 metadata:
   name: vaultwarden-postgresql
   namespace: vaultwarden
+
 spec:
-  instances: 2 # Set to 2 or 3 for high availability (primary + standby replicas)
-  
-  # Storage configuration
+  instances: 1
+
   storage:
     size: 10Gi
-    storageClass: local-path # Adjust to your RWO storage class
+    storageClass: local-path
 
-  # Database initialization defaults
   bootstrap:
     recovery:
-    #   initdb:
-    #     database: vaultwarden
-    #     owner: vaultwarden
-    #     secret:
-    #       name: vaultwarden-db-secret # Secret created by CNPG holding database credentials
       source: vaultwarden-backup-pitr
 
       # recoveryTarget:

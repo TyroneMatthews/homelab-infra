@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base/vaultwarden
+  - gateway.yaml
 
-  - certificate.yaml
   # - ingressroute.yaml
   # - vault-secrets.yaml

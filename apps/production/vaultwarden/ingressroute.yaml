@@ -11,7 +11,7 @@ spec:
     - match: Host(`vaultwarden.tmatthews.casa`)
       kind: Rule
       services:
-        - name: vaultwarden-svc
+        - name: vaultwarden
           port: 80
   tls:
     secretName: vaultwarden-tls-cert # Keep this empty. Traefik automatically applies the default TLSStore.

@@ -1,0 +1,181 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+6 0 obj
+<< /Length 3963 >>
+stream
+BT
+/F2 18 Tf 54 744.0 Td (Cloudflare Tunnel, Traefik, and Vaultwarden Runbook) Tj 0 -24.0 Td
+/F1 9 Tf 54 720.0 Td (Date: 2026-08-19 | Hostname: vaultwarden.tmatthews.casa) Tj 0 -16.0 Td
+/F2 14 Tf 54 704.0 Td (Architecture) Tj 0 -20.0 Td
+/F1 9 Tf 54 684.0 Td (Cloudflare Tunnel connects to the internal Traefik Service over HTTPS. Traefik's Gateway API) Tj 0 -13.0 Td
+/F1 9 Tf 54 671.0 Td (listener terminates TLS and routes the hostname to the Vaultwarden Service. The Vaultwarden) Tj 0 -13.0 Td
+/F1 9 Tf 54 658.0 Td (Service exposes port 80 and targets the application container on port 8080.) Tj 0 -13.0 Td
+/F1 9 Tf 54 645.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 632.0 Td (Cloudflare Tunnel -> https://traefik.traefik.svc.cluster.local:443 -> Traefik Gateway) Tj 0 -11.0 Td
+/F3 8 Tf 62 621.0 Td (public-gateway -> Service vaultwarden:80 -> Vaultwarden pod:8080) Tj 0 -11.0 Td
+/F1 9 Tf 54 610.0 Td () Tj 0 -13.0 Td
+/F2 14 Tf 54 597.0 Td (Recent causes and fixes) Tj 0 -20.0 Td
+/F2 11 Tf 54 577.0 Td (1. Invalid Traefik Helm port keys) Tj 0 -16.0 Td
+/F1 9 Tf 54 561.0 Td (Traefik Helm chart 41.0.2 expects ports.web and ports.websecure. Using ports.http or) Tj 0 -13.0 Td
+/F1 9 Tf 54 548.0 Td (ports.https can produce missing entrypoints or duplicate Service and Deployment ports during) Tj 0 -13.0 Td
+/F1 9 Tf 54 535.0 Td (an upgrade.) Tj 0 -13.0 Td
+/F1 9 Tf 54 522.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 509.0 Td (ports:) Tj 0 -11.0 Td
+/F3 8 Tf 62 498.0 Td (  web: port 80, exposedPort 80) Tj 0 -11.0 Td
+/F3 8 Tf 62 487.0 Td (  websecure: port 443, exposedPort 443) Tj 0 -11.0 Td
+/F1 9 Tf 54 476.0 Td () Tj 0 -13.0 Td
+/F2 11 Tf 54 463.0 Td (2. HTTPRoute backend name mismatch) Tj 0 -16.0 Td
+/F1 9 Tf 54 447.0 Td (The live Helm-managed Service is named vaultwarden, not vaultwarden-svc. The route must) Tj 0 -13.0 Td
+/F1 9 Tf 54 434.0 Td (reference Service port 80. Port 8080 is the container targetPort.) Tj 0 -13.0 Td
+/F1 9 Tf 54 421.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 408.0 Td (backendRefs:) Tj 0 -11.0 Td
+/F3 8 Tf 62 397.0 Td (  - name: vaultwarden) Tj 0 -11.0 Td
+/F3 8 Tf 62 386.0 Td (    kind: Service) Tj 0 -11.0 Td
+/F3 8 Tf 62 375.0 Td (    port: 80) Tj 0 -11.0 Td
+/F1 9 Tf 54 364.0 Td () Tj 0 -13.0 Td
+/F2 11 Tf 54 351.0 Td (3. Cloudflare origin hostname mismatch) Tj 0 -16.0 Td
+/F1 9 Tf 54 335.0 Td (The tunnel connects to Traefik using its internal Service DNS name, while the Gateway and) Tj 0 -13.0 Td
+/F1 9 Tf 54 322.0 Td (certificate use vaultwarden.tmatthews.casa. Explicitly set the origin SNI and HTTP Host) Tj 0 -13.0 Td
+/F1 9 Tf 54 309.0 Td (header to avoid origin TLS or host-routing 502 errors.) Tj 0 -13.0 Td
+/F1 9 Tf 54 296.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 283.0 Td (service: https://traefik.traefik.svc.cluster.local:443) Tj 0 -11.0 Td
+/F3 8 Tf 62 272.0 Td (originRequest:) Tj 0 -11.0 Td
+/F3 8 Tf 62 261.0 Td (  originServerName: vaultwarden.tmatthews.casa) Tj 0 -11.0 Td
+/F3 8 Tf 62 250.0 Td (  httpHostHeader: vaultwarden.tmatthews.casa) Tj 0 -11.0 Td
+/F1 9 Tf 54 239.0 Td () Tj 0 -13.0 Td
+/F2 11 Tf 54 226.0 Td (4. Restart command namespace) Tj 0 -16.0 Td
+/F1 9 Tf 54 210.0 Td (cloudflared is deployed in the cloudflared namespace. The namespace is required:) Tj 0 -13.0 Td
+/F1 9 Tf 54 197.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 184.0 Td (kubectl rollout restart deployment/cloudflared -n cloudflared) Tj 0 -11.0 Td
+/F3 8 Tf 62 173.0 Td (kubectl rollout status deployment/cloudflared -n cloudflared --timeout=120s) Tj 0 -11.0 Td
+/F1 9 Tf 54 162.0 Td () Tj 0 -13.0 Td
+/F2 11 Tf 54 149.0 Td (5. Restricted PodSecurity warning) Tj 0 -16.0 Td
+/F1 9 Tf 54 133.0 Td (Add these settings to the cloudflared container:) Tj 0 -13.0 Td
+/F1 9 Tf 54 120.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 107.0 Td (securityContext:) Tj 0 -11.0 Td
+/F3 8 Tf 62 96.0 Td (  allowPrivilegeEscalation: false) Tj 0 -11.0 Td
+/F3 8 Tf 62 85.0 Td (  capabilities:) Tj 0 -11.0 Td
+/F3 8 Tf 62 74.0 Td (    drop: [ALL]) Tj 0 -11.0 Td
+/F3 8 Tf 62 63.0 Td (  runAsNonRoot: true) Tj 0 -11.0 Td
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 3960 >>
+stream
+BT
+/F3 8 Tf 62 744.0 Td (  seccompProfile:) Tj 0 -11.0 Td
+/F3 8 Tf 62 733.0 Td (    type: RuntimeDefault) Tj 0 -11.0 Td
+/F1 9 Tf 54 722.0 Td () Tj 0 -13.0 Td
+/F2 14 Tf 54 709.0 Td (Recovery and verification commands) Tj 0 -20.0 Td
+/F1 9 Tf 54 689.0 Td (Inspect the active path:) Tj 0 -13.0 Td
+/F1 9 Tf 54 676.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 663.0 Td (kubectl get pods -n cloudflared -o wide) Tj 0 -11.0 Td
+/F3 8 Tf 62 652.0 Td (kubectl get svc -n traefik -o wide) Tj 0 -11.0 Td
+/F3 8 Tf 62 641.0 Td (kubectl get gateway,httproute -n vaultwarden -o wide) Tj 0 -11.0 Td
+/F3 8 Tf 62 630.0 Td (kubectl get endpointslice -n vaultwarden -l kubernetes.io/service-name=vaultwarden -o) Tj 0 -11.0 Td
+/F3 8 Tf 62 619.0 Td (wide) Tj 0 -11.0 Td
+/F1 9 Tf 54 608.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 595.0 Td (Check Gateway API status:) Tj 0 -13.0 Td
+/F1 9 Tf 54 582.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 569.0 Td (kubectl describe gateway public-gateway -n vaultwarden) Tj 0 -11.0 Td
+/F3 8 Tf 62 558.0 Td (kubectl describe httproute vaultwarden -n vaultwarden) Tj 0 -11.0 Td
+/F3 8 Tf 62 547.0 Td (kubectl describe httproute vaultwarden-http-redirect -n vaultwarden) Tj 0 -11.0 Td
+/F1 9 Tf 54 536.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 523.0 Td (Expected conditions include Accepted=True and ResolvedRefs=True. The Gateway should also be) Tj 0 -13.0 Td
+/F1 9 Tf 54 510.0 Td (Programmed=True.) Tj 0 -13.0 Td
+/F1 9 Tf 54 497.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 484.0 Td (Check logs:) Tj 0 -13.0 Td
+/F1 9 Tf 54 471.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 458.0 Td (kubectl logs -n cloudflared deployment/cloudflared --since=20m | grep -Ei) Tj 0 -11.0 Td
+/F3 8 Tf 62 447.0 Td ('ERR|error|502|503|origin|certificate|tls|connection refused') Tj 0 -11.0 Td
+/F3 8 Tf 62 436.0 Td (kubectl logs -n traefik deployment/traefik --since=20m | grep -Ei) Tj 0 -11.0 Td
+/F3 8 Tf 62 425.0 Td ('error|gateway|vaultwarden|502|tls|http') Tj 0 -11.0 Td
+/F1 9 Tf 54 414.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 401.0 Td (Test direct Traefik routing:) Tj 0 -13.0 Td
+/F1 9 Tf 54 388.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 375.0 Td (curl -sS -D - -o /dev/null -H 'Host: vaultwarden.tmatthews.casa' http://192.168.40.15/) Tj 0 -11.0 Td
+/F3 8 Tf 62 364.0 Td (curl -k -sS -D - -o /dev/null --resolve vaultwarden.tmatthews.casa:443:192.168.40.15) Tj 0 -11.0 Td
+/F3 8 Tf 62 353.0 Td (https://vaultwarden.tmatthews.casa/) Tj 0 -11.0 Td
+/F1 9 Tf 54 342.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 329.0 Td (Expected results: HTTP returns 301 to HTTPS; direct HTTPS returns 200.) Tj 0 -13.0 Td
+/F1 9 Tf 54 316.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 303.0 Td (Test through Cloudflare:) Tj 0 -13.0 Td
+/F1 9 Tf 54 290.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 277.0 Td (curl -sS -D - -o /dev/null https://vaultwarden.tmatthews.casa/) Tj 0 -11.0 Td
+/F1 9 Tf 54 266.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 253.0 Td (Expected result: HTTP/2 200. A 502 means Cloudflare cannot complete the origin request;) Tj 0 -13.0 Td
+/F1 9 Tf 54 240.0 Td (check tunnel logs, then test direct Traefik HTTPS.) Tj 0 -13.0 Td
+/F1 9 Tf 54 227.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 214.0 Td (Reconcile Flux after committing changes:) Tj 0 -13.0 Td
+/F1 9 Tf 54 201.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 188.0 Td (flux reconcile kustomization apps -n flux-system --with-source) Tj 0 -11.0 Td
+/F3 8 Tf 62 177.0 Td (flux reconcile helmrelease traefik -n traefik) Tj 0 -11.0 Td
+/F3 8 Tf 62 166.0 Td (flux reconcile helmrelease vaultwarden -n vaultwarden) Tj 0 -11.0 Td
+/F3 8 Tf 62 155.0 Td (flux get kustomizations -A) Tj 0 -11.0 Td
+/F3 8 Tf 62 144.0 Td (flux get helmreleases -A) Tj 0 -11.0 Td
+/F1 9 Tf 54 133.0 Td () Tj 0 -13.0 Td
+/F1 9 Tf 54 120.0 Td (Validate before pushing:) Tj 0 -13.0 Td
+/F1 9 Tf 54 107.0 Td () Tj 0 -13.0 Td
+/F3 8 Tf 62 94.0 Td (kustomize build apps/production >/tmp/apps-production.yaml) Tj 0 -11.0 Td
+/F3 8 Tf 62 83.0 Td (kubectl apply --dry-run=server -k apps/production) Tj 0 -11.0 Td
+/F3 8 Tf 62 72.0 Td (git diff --check) Tj 0 -11.0 Td
+/F1 9 Tf 54 61.0 Td () Tj 0 -13.0 Td
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 445 >>
+stream
+BT
+/F2 14 Tf 54 744.0 Td (Known-good final state) Tj 0 -20.0 Td
+/F1 9 Tf 54 724.0 Td (Cloudflare Tunnel replicas 2/2 Ready; Traefik Gateway provider started; public-gateway) Tj 0 -13.0 Td
+/F1 9 Tf 54 711.0 Td (Accepted and Programmed; Vaultwarden HTTPRoute Accepted and ResolvedRefs; vaultwarden:80) Tj 0 -13.0 Td
+/F1 9 Tf 54 698.0 Td (maps to pod:8080; public hostname returns HTTP/2 200.) Tj 0 -13.0 Td
+/F1 9 Tf 54 685.0 Td () Tj 0 -13.0 Td
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000134 00000 n 
+0000000204 00000 n 
+0000000279 00000 n 
+0000000347 00000 n 
+0000004362 00000 n 
+0000004508 00000 n 
+0000008520 00000 n 
+0000008666 00000 n 
+0000009163 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R >>
+startxref
+9311
+%%EOF

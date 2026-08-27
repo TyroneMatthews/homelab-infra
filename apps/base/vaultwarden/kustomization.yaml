@@ -4,12 +4,14 @@ namespace: vaultwarden
 
 resources:
   - namespace.yaml
+  - backblaze-creds.yaml
   - vaultwarden-db-secret.yaml
   - vaultwarden-db-url.yaml
+  - barman-object-store.yaml
   - postgres-cluster.yaml
   - vaultwarden-helmrepository.yaml
   - vaultwarden-helmrelease.yaml
-  - gateway.yaml
   - httproute.yaml
   - https-redirect.yaml
   - vw-secret.yaml
+  - backup-schedule.yaml

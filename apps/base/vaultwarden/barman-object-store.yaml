@@ -1,0 +1,21 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: vaultwarden-b2
+  namespace: vaultwarden
+spec:
+  configuration:
+    destinationPath: s3://vwdb-backup/
+    endpointURL: https://s3.us-east-005.backblazeb2.com
+    s3Credentials:
+      accessKeyId:
+        name: backblaze-b2-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: backblaze-b2-creds
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip
+  retentionPolicy: 30d

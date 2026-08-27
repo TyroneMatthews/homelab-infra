@@ -6,6 +6,7 @@ metadata:
 spec:
   parentRefs:
   - name: public-gateway
+    namespace: traefik
     sectionName: https
 
   hostnames:
@@ -19,4 +20,6 @@ spec:
 
       backendRefs:
         - name: vaultwarden
+          kind: Service
           port: 80
+
