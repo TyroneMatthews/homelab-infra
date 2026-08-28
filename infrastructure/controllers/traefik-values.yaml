@@ -80,7 +80,7 @@ log:
   level: "INFO"
 
 gateway:
-  enabled: false
+  enabled: true
 
 gatewayClass:
   enabled: true
