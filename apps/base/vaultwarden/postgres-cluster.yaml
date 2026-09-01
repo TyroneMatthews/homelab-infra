@@ -4,6 +4,7 @@ metadata:
   name: vaultwarden-postgresql
   namespace: vaultwarden
 spec:
+  #imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixi
   instances: 2 # Set to 2 or 3 for high availability (primary + standby replicas)
   
   # Storage configuration
@@ -19,7 +20,7 @@ spec:
     #     owner: vaultwarden
     #     secret:
     #       name: vaultwarden-db-secret # Secret created by CNPG holding database credentials
-      source: vaultwarden-backup-pitr
+      source: vaultwarden-backup-pitr             # externalCluster name, defined below
 
       # recoveryTarget:
       #   targetTime: "2026-08-24T10:58:00"
@@ -28,14 +29,13 @@ spec:
       isWALArchiver: true
       parameters:
         barmanObjectName: vaultwarden-b2
-        serverName: vaultwarden-postgresql-restore         # distinct name for the PITR cluster, used to store WAL files in B2 bucket
+        serverName: vaultwarden-postgresql         # NEW clean identity going forward distinct name for the PITR cluster, used to store WAL files in B2 bucket
 
   externalClusters:
     - name: vaultwarden-backup-pitr
-
       plugin:
         name: barman-cloud.cloudnative-pg.io
 
         parameters:
           barmanObjectName: vaultwarden-b2
-          serverName: vaultwarden-postgresql-pitr
+          serverName: vaultwarden-postgresql-pitr     # read from the LIVE cluster's backup
