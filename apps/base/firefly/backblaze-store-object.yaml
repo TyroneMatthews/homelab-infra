@@ -5,14 +5,14 @@ metadata:
   namespace: firefly
 spec:
   configuration:
-    destinationPath: s3://vwdb-backup/
+    destinationPath: s3://tmatt-backups/
     endpointURL: https://s3.us-east-005.backblazeb2.com
     s3Credentials:
       accessKeyId:
-        name: backblaze-b2-creds
+        name: backblaze-b2-secret
         key: ACCESS_KEY_ID
       secretAccessKey:
-        name: backblaze-b2-creds
+        name: backblaze-b2-secret
         key: ACCESS_SECRET_KEY
     wal:
       compression: gzip
