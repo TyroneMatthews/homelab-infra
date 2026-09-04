@@ -14,6 +14,8 @@ spec:
         name: firefly-repo
       version: '>=1.0.0 <2.0.0'
   interval: 1h
+  driftDetection:
+    mode: enabled
   values:
     replicaCount: 1
     deploymentStrategyType: RollingUpdate
