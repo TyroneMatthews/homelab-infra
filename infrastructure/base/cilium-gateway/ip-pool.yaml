@@ -1,0 +1,8 @@
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: vlan40-service-pool
+spec:
+  blocks:
+    - start: 192.168.40.1
+      stop: 192.168.40.30
