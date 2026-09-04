@@ -5,6 +5,7 @@ resources:
   - namespace.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - firefly-app-secret.yaml
   - firefly-db-secret.yaml
   - firefly-dbcluster.yaml
   - backblaze-creds.yaml

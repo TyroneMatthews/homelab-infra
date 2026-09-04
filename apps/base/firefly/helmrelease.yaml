@@ -47,7 +47,7 @@ spec:
       envValueFrom:
         APP_PASSWORD:
           secretKeyRef:
-            name: firefly-db-secret
+            name: firefly-app-secret
             key: password
         DB_PASSWORD:
           secretKeyRef:
