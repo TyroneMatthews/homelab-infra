@@ -1,0 +1,109 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: firefly-iii
+  namespace: firefly
+spec:
+  chart:
+    spec:
+      chart: firefly-iii
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: firefly-repo
+      version: '>=1.0.0 <2.0.0'
+  interval: 1h
+  values:
+    replicaCount: 1
+    deploymentStrategyType: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+
+    # image:
+    #   registry: docker.io
+    #   repository: curlimages/curl
+    #   pullPolicy: IfNotPresent
+    #   # -- Overrides the image tag whose default is the chart appVersion.
+    #   tag: 8.12.0
+    persistence:
+      # -- If you set this to false, uploaded attachments are not stored persistently and will be lost with every restart of the pod
+      enabled: true
+      storageClassName: ugreen-nfs-sc
+      accessModes: ReadWriteOnce
+      # volumeName: your-pv-name
+      # selector:
+      #   matchLabels:
+      #     app: my-app
+      storage: 1Gi
+      # -- If you want to use an existing claim, set it here
+      existingClaim: ""
+    config:
+      # -- Set this to the name of a secret to load environment variables from. If defined, values in the secret will override values in config.env
+      existingSecret: ""
+
+      # -- Set environment variables from configMaps or Secrets
+      envValueFrom:
+        APP_PASSWORD:
+          secretKeyRef:
+            name: firefly-db-secret
+            key: password
+        DB_PASSWORD:
+          secretKeyRef:
+            name: firefly-db-secret
+            key: password
+
+      # -- Directly defined environment variables. Use this for non-secret configuration values.
+      env:
+        DB_HOST: firefly-db-rw
+        DB_CONNECTION: pgsql
+        DB_PORT: "5432"
+        DB_DATABASE: firefly
+        DB_USERNAME: firefly
+        DEFAULT_LANGUAGE: "en_US"
+        DEFAULT_LOCALE: "equal"
+        TZ: "America/New_York"
+        TRUSTED_PROXIES: "**"
+    service:
+      type: ClusterIP
+      port: 80
+
+    ingress:
+      enabled: false
+      className: ""
+      annotations: {}
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      hosts:
+        - chart-example.local
+      tls: []
+      #  - secretName: chart-example-tls
+      #    hosts:
+      #      - chart-example.local
+
+    httpRoute:
+      enabled: false
+      annotations: {}
+      hostnames: []
+      parentRefs: []
+      filters: []
+      additionalRules: []
+
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: http
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: http
+      initialDelaySeconds: 15
+      timeoutSeconds: 1
+    startupProbe:
+      httpGet:
+        path: /health
+        port: http
+      # Give the app 30 x 10 = 300s to startup
+      failureThreshold: 30
+      periodSeconds: 10

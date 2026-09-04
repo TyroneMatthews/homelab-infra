@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - helmrepo.yaml
+  - helmrelease.yaml
+  - firefly-db-secret.yaml
+  - firefly-dbcluster.yaml
+  - backblaze-creds.yaml
+  - backblaze-store-object.yaml
+  - httproute.yaml
