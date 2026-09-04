@@ -5,3 +5,4 @@ namespace: traefik
 resources:
   - dashboard-ingress.yaml
   - gatewayclass.yaml
+  - referencegrant-cilium-gateway.yaml
