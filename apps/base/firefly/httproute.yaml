@@ -19,7 +19,7 @@ spec:
             value: /
 
       backendRefs:
-        - name: firefly
+        - name: firefly-iii
           kind: Service
           port: 80
 
