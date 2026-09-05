@@ -6,6 +6,7 @@ resources:
   - namespace.yaml
   - helmrepo.yaml
   - helmrelease.yaml
+  - importer-helmrelease.yaml
   - firefly-app-secret.yaml
   - firefly-db-secret.yaml
   - firefly-dbcluster.yaml
