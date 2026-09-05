@@ -18,7 +18,7 @@ spec:
   values:
     trustedProxies: "**"
     fireflyiii:
-      url: http://firefly-iii.firefly.svc.cluster.local:80
+      url: https://firefly.tmatthews.casa
       vanityUrl: https://firefly-importer.tmatthews.casa
       auth:
         existingSecret: ""
