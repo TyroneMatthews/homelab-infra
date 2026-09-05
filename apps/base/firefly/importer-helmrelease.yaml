@@ -19,7 +19,7 @@ spec:
     trustedProxies: "**"
     fireflyiii:
       url: https://firefly.tmatthews.casa
-      vanityUrl: https://firefly-importer.tmatthews.casa
+      vanityUrl: https://firefly.tmatthews.casa
       auth:
         existingSecret: ""
         accessToken: ""
