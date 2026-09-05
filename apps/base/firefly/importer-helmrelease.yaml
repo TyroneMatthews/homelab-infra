@@ -26,7 +26,11 @@ spec:
     config:
       env:
         IGNORE_DUPLICATE_ERRORS: "false"
+        SESSION_DRIVER: cookie
+        SESSION_SECURE_COOKIE: "true"
         TZ: America/New_York
+    podAnnotations:
+      config-revision: "session-cookie-v1"
     service:
       type: ClusterIP
       port: 80
