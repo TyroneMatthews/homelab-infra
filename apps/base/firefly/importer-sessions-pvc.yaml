@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: firefly-importer-sessions
+  namespace: firefly
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ugreen-nfs-sc
+  resources:
+    requests:
+      storage: 1Gi
