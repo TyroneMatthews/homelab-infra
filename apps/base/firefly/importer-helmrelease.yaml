@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: firefly-importer
+  namespace: firefly
+spec:
+  interval: 1h
+  driftDetection:
+    mode: enabled
+  chart:
+    spec:
+      chart: importer
+      version: 1.6.0
+      sourceRef:
+        kind: HelmRepository
+        name: firefly-repo
+      reconcileStrategy: ChartVersion
+  values:
+    trustedProxies: "**"
+    fireflyiii:
+      url: http://firefly-iii.firefly.svc.cluster.local:80
+      vanityUrl: https://firefly-importer.tmatthews.casa
+      auth:
+        existingSecret: firefly-importer-auth
+        accessToken: accessToken
+    config:
+      env:
+        IGNORE_DUPLICATE_ERRORS: "false"
+        TZ: America/New_York
+    service:
+      type: ClusterIP
+      port: 80
+    ingress:
+      enabled: false
+    httpRoute:
+      enabled: true
+      hostnames:
+        - firefly-importer.tmatthews.casa
+      parentRefs:
+        - name: internal-gateway
+          namespace: gateway-system
+          sectionName: https
