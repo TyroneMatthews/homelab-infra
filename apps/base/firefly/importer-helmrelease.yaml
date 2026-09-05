@@ -21,8 +21,8 @@ spec:
       url: http://firefly-iii.firefly.svc.cluster.local:80
       vanityUrl: https://firefly-importer.tmatthews.casa
       auth:
-        existingSecret: firefly-importer-auth
-        accessToken: accessToken
+        existingSecret: ""
+        accessToken: ""
     config:
       env:
         IGNORE_DUPLICATE_ERRORS: "false"
