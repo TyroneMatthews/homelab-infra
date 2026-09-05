@@ -26,13 +26,17 @@ spec:
     config:
       env:
         IGNORE_DUPLICATE_ERRORS: "false"
-        SESSION_COOKIE: firefly_importer_session
-        SESSION_DOMAIN: .tmatthews.casa
-        SESSION_DRIVER: cookie
-        SESSION_SECURE_COOKIE: "true"
+        SESSION_DRIVER: file
         TZ: America/New_York
     podAnnotations:
-      config-revision: "session-cookie-v2"
+      config-revision: "session-file-v1"
+    additionalVolumeMounts:
+      - name: sessions
+        mountPath: /var/www/html/storage/framework/sessions
+    additionalVolumes:
+      - name: sessions
+        persistentVolumeClaim:
+          claimName: firefly-importer-sessions
     service:
       type: ClusterIP
       port: 80
