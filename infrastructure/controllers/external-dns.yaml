@@ -29,6 +29,9 @@ spec:
         name: external-dns
       version: "1.21.1"
   interval: 1h
+  install:
+    remediation:
+      retries: 3
 
   values:
     image:  # @schema additionalProperties: false
