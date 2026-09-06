@@ -5,4 +5,4 @@ resources:
   # - ../../base/cert-manager
   - clusterissuer-production.yaml
   - traefik-wildcard.yaml
-  - cloudflare-api-token.yaml
+  # - cloudflare-api-token.yaml

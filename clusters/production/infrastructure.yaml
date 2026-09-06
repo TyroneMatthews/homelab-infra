@@ -1,11 +1,33 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: infra-secrets
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+  path: ./infrastructure/secrets
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  wait: true
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: infra-controllers
   namespace: flux-system
 spec:
   dependsOn:
     - name: gateway-api-crds
+    - name: infra-secrets
   interval: 10m
   path: ./infrastructure/controllers
   prune: true
@@ -24,10 +46,6 @@ metadata:
 spec:
   dependsOn:
     - name: infra-controllers
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
   interval: 1h
   retryInterval: 2m
   timeout: 5m
