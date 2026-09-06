@@ -5,4 +5,5 @@ resources:
   - cert-manager
   - cnpg
   - ../base/cilium-gateway
+  - external-dns
   - traefik
