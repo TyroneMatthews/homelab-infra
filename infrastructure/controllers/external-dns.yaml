@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external-dns
+
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  interval: 1h
+  url: https://kubernetes-sigs.github.io/external-dns/  # community chart
+
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  chart:
+    spec:
+      chart: external-dns
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: external-dns
+      version: "1.21.1"
+  interval: 1h
+
+  values:
+    image:  # @schema additionalProperties: false
+      # -- Image repository for the `external-dns` container.
+      repository: registry.k8s.io/external-dns/external-dns
+      # -- Image tag for the `external-dns` container, this will default to `.Chart.AppVersion` if not set.
+      tag:  # @schema type:[string, null]
+      # -- Image pull policy for the `external-dns` container.
+      pullPolicy: IfNotPresent  # @schema enum:[IfNotPresent, Always]
+
+    sources:
+      - service
+      - ingress
+      - gateway-httproute
+
+    # -- How DNS records are synchronized between sources and providers; available values are `create-only`, `sync`, & `upsert-only`.
+    policy: upsert-only
+
+    domainFilters:
+      - tmatthews.casa
+
+    txtOwnerId: home-k8s-p01
+
+    provider:  # @schema type: [object, string]
+        # -- _ExternalDNS_ provider name; for the available providers and how to configure them see [README](https://github.com/kubernetes-sigs/external-dns/blob/master/charts/external-dns/README.md#providers).
+      name: rfc2136
+
+    extraArgs:
+      - --rfc2136-host=technitium.tmatthews.casa
+      - --rfc2136-port=53
+      - --rfc2136-zone=tmatthews.casa
+      - --rfc2136-tsig-secret-alg=hmac-sha256
+      # - --rfc2136-axfr
+
+    env:
+      - name: "EXTERNAL_DNS_RFC2136_TSIG_SECRET"
+        valueFrom:
+          secretKeyRef:
+            name: rfc2136-keys
+            key: rfc2136-tsig-secret #gitleaks:allow
+      
+      - name: "EXTERNAL_DNS_RFC2136_TSIG_KEYNAME"
+        valueFrom:
+          secretKeyRef:
+            name: rfc2136-keys
+            key: rfc2136-tsig-keyname
