@@ -1,368 +1,141 @@
-# homelab-infra
-
 # 🏡 Home Infrastructure & GitOps Cluster
 
-An automated, declarative home lab environment powered by Kubernetes, Talos Linux, Cilium, and GitOps.
-
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-v1.35.4-326CE5?logo=kubernetes\&logoColor=white)](https://kubernetes.io/)
-[![Talos Linux](https://img.shields.io/badge/Talos%20Linux-v1.12.9-FF7300?logo=linux\&logoColor=white)](https://www.talos.dev/)
-[![Cilium](https://img.shields.io/badge/Cilium-v1.18.12-F8C517?logo=cilium\&logoColor=black)](https://cilium.io/)
-[![FluxCD](https://img.shields.io/badge/FluxCD-GitOps-5468FF?logo=flux\&logoColor=white)](https://fluxcd.io/)
-[![Gateway API](https://img.shields.io/badge/Gateway%20API-v1.5.1-326CE5?logo=kubernetes\&logoColor=white)](https://gateway-api.sigs.k8s.io/)
+A declarative home-lab Kubernetes environment managed with GitOps.
 
 ---
 
-## 💻 Hardware & Network
+## 🎯 Purpose
 
-### Physical Nodes
+This repo is both my running infrastructure and my learning environment for running a production-style Kubernetes platform at home.
 
-| Hostname  | Role                   | Specs               | Network     | Notes     |
-| :-------- | :--------------------- | :------------------ | :---------- | :-------- |
-| `node-01` | Control Plane / Worker | Mac Mini (10GbE)    | `10.0.30.x` |   Died    |
-| `node-02` | Control Plane / Worker | Mac Mini (10GbE)    | `10.0.30.x` |           |
-| `node-03` | Control Plane / Worker | Mac Mini (10GbE)    | `10.0.30.x` |           |
-| `ugreen`  | NAS / Storage          | DXP4800 Pro (10GbE) | `10.0.90.x` | NFS share |
+I use it to get hands-on with:
 
-### Network Segmentation
+* Kubernetes administration and troubleshooting
+* GitOps and declarative infrastructure
+* Kubernetes networking and Gateway API
+* Infrastructure automation
+* Secret management and encryption
+* Persistent storage and PostgreSQL
+* Backup and disaster recovery
+* Security and access control
+* Running self-hosted apps
 
-| VLAN ID | Subnet / CIDR   | Purpose             | Routing Type     | Notes                                                           |
-| :------ | :-------------- | :------------------ | :--------------- | :-------------------------------------------------------------- |
-| `30`    | `10.0.30.0/24`  | K8s Hosts / Nodes   | Routed           | Physical bare-metal OS IPs of the mini PCs.                     |
-| `35`    | `N/A (L2 Only)` | Pod Network         | Non-Routed       | L2 VLAN for pod traffic to separate it from node traffic.       |
-| `38`    | `10.0.38.0/24`  | BGP Peering         | Routed (Transit) | BGP peering transit subnet connecting nodes to router.          |
-| `40`    | `10.0.40.0/24`  | Service IPs via BGP | BGP Advertised   | Data Plane: Ingress and External Service VIPs.                  |
-| `75`    | `10.0.75.0/24`  | L2 Storage Data     | Non-Routed       | High-speed NFS/iSCSI storage traffic (Jumbo Frames / MTU 9000). |
+The point of the lab isn't just to have apps running. It's to actually understand what's happening underneath: how the pieces talk to each other, how to change infra without breaking it, and how to recover when something inevitably does break. Everything here aims to be declarative, reproducible, secure, and recoverable.
 
----
-
-## 🛠️ Tech Stack
-
-### 🖥️ Kubernetes Platform
-
-[![Kubernetes](https://img.shields.io/badge/Kubernetes-v1.35.4-326CE5?logo=kubernetes\&logoColor=white)](https://kubernetes.io/)
-[![Talos](https://img.shields.io/badge/Talos%20Linux-v1.12.9-FF7300?logo=linux\&logoColor=white)](https://www.talos.dev/)
-[![Flux](https://img.shields.io/badge/FluxCD-GitOps-5468FF?logo=flux\&logoColor=white)](https://fluxcd.io/)
-[![Kustomize](https://img.shields.io/badge/Kustomize-Kubernetes-326CE5?logo=kubernetes\&logoColor=white)](https://kustomize.io/)
-
-| Technology      | Role                                              |
-| :-------------- | :------------------------------------------------ |
-| **Talos Linux** | Immutable, API-driven Kubernetes operating system |
-| **Kubernetes**  | Container orchestration platform                  |
-| **FluxCD**      | GitOps continuous delivery and reconciliation     |
-| **Kustomize**   | Declarative Kubernetes configuration and overlays |
+Infra, apps, and config all live in Git so changes can be reviewed, reproduced, and rolled back.
 
 ---
 
-### 🌐 Networking & Ingress
+## 🧭 Architecture
 
-[![Cilium](https://img.shields.io/badge/Cilium-v1.18.12-F8C517?logo=cilium\&logoColor=black)](https://cilium.io/)
-[![Gateway API](https://img.shields.io/badge/Gateway%20API-v1.5.1-326CE5?logo=kubernetes\&logoColor=white)](https://gateway-api.sigs.k8s.io/)
-[![Traefik](https://img.shields.io/badge/Traefik-Gateway%20%26%20Ingress-24A1C1?logo=traefikproxy\&logoColor=white)](https://traefik.io/)
-[![Cloudflare](https://img.shields.io/badge/Cloudflare-Tunnel-F38020?logo=cloudflare\&logoColor=white)](https://www.cloudflare.com/)
-
-| Technology             | Role                                                      |
-| :--------------------- | :-------------------------------------------------------- |
-| **Cilium**             | Kubernetes CNI, eBPF networking, network policy, and BGP  |
-| **Cilium Gateway API** | Internal application gateway                              |
-| **Traefik**            | External application gateway / ingress                    |
-| **Gateway API**        | Kubernetes-native HTTP routing                            |
-| **BGP**                | Advertises Kubernetes service IPs to the physical network |
-| **Cloudflare Tunnel**  | Secure external access without direct inbound exposure    |
-
----
-
-### 🔐 TLS & DNS
-
-[![cert-manager](https://img.shields.io/badge/cert--manager-TLS-1E88E5?logo=kubernetes\&logoColor=white)](https://cert-manager.io/)
-[![Let's Encrypt](https://img.shields.io/badge/Let's%20Encrypt-Certificates-003A70?logo=letsencrypt\&logoColor=white)](https://letsencrypt.org/)
-[![Cloudflare](https://img.shields.io/badge/Cloudflare-DNS-F38020?logo=cloudflare\&logoColor=white)](https://www.cloudflare.com/)
-[![Technitium](https://img.shields.io/badge/Technitium-DNS-333333?logo=dns\&logoColor=white)](https://technitium.com/dns/)
-[![ExternalDNS](https://img.shields.io/badge/ExternalDNS-Kubernetes-326CE5?logo=kubernetes\&logoColor=white)](https://kubernetes-sigs.github.io/external-dns/)
-
-| Technology               | Role                                       |
-| :----------------------- | :----------------------------------------- |
-| **cert-manager**         | Automated certificate issuance and renewal |
-| **Let's Encrypt**        | Public certificate authority               |
-| **Cloudflare DNS**       | DNS-01 challenge provider                  |
-| **ExternalDNS**          | Automated DNS record management            |
-| **Technitium DNS**       | Internal DNS / split-horizon DNS           |
-| **Wildcard Certificate** | `*.tmatthews.casa`                         |
-
----
-
-### 💾 Storage
-
-[![NFS](https://img.shields.io/badge/Storage-NFS-555555?logo=linux\&logoColor=white)](https://en.wikipedia.org/wiki/Network_File_System)
-[![Backblaze](https://img.shields.io/badge/Backblaze-B2-E21E26?logo=backblaze\&logoColor=white)](https://www.backblaze.com/cloud-storage)
-
-| Technology                 | Role                                |
-| :------------------------- | :---------------------------------- |
-| **UGREEN NAS**             | Primary network storage             |
-| **NFS**                    | Shared persistent storage           |
-| **NFS Client Provisioner** | Dynamic Kubernetes PV provisioning  |
-| **Local Path Provisioner** | Node-local persistent storage       |
-| **Backblaze B2**           | Off-site object storage for backups |
-
----
-
-### 🗄️ Databases & Disaster Recovery
-
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-4169E1?logo=postgresql\&logoColor=white)](https://www.postgresql.org/)
-[![CloudNativePG](https://img.shields.io/badge/CloudNativePG-PostgreSQL-336791?logo=postgresql\&logoColor=white)](https://cloudnative-pg.io/)
-
-| Technology              | Role                                |
-| :---------------------- | :---------------------------------- |
-| **PostgreSQL**          | Application database                |
-| **CloudNativePG**       | Kubernetes PostgreSQL operator      |
-| **Barman Cloud Plugin** | PostgreSQL backup to object storage |
-| **Backblaze B2**        | Off-site PostgreSQL backup storage  |
-
-Critical PostgreSQL workloads are backed up to Backblaze B2 and restore procedures are tested using manifests under `k8s-test/`.
-
----
-
-### 📦 Applications
-
-[![Vaultwarden](https://img.shields.io/badge/Vaultwarden-Password%20Manager-175DDC?logo=bitwarden\&logoColor=white)](https://github.com/dani-garcia/vaultwarden)
-[![Firefly III](https://img.shields.io/badge/Firefly%20III-Personal%20Finance-8B5CF6?logo=firefly\&logoColor=white)](https://www.firefly-iii.org/)
-[![Linkding](https://img.shields.io/badge/Linkding-Bookmarks-333333?logo=bookmark\&logoColor=white)](https://github.com/sissbruecker/linkding)
-
-| Application           | Purpose                                  |
-| :-------------------- | :--------------------------------------- |
-| **Vaultwarden**       | Self-hosted password manager             |
-| **Firefly III**       | Personal finance management              |
-| **Linkding**          | Self-hosted bookmark manager             |
-| **Cloudflare Tunnel** | External access to selected applications |
-
----
-
-## 🔄 GitOps Architecture
-
-The repository follows a declarative GitOps workflow:
+Four layers, roughly:
 
 ```text
-                    ┌──────────────────────┐
-                    │      Git Repository  │
-                    │     homelab-infra    │
-                    └──────────┬───────────┘
-                               │
-                               │ Git
-                               ▼
-                    ┌──────────────────────┐
-                    │       FluxCD         │
-                    │                      │
-                    │  Source Controller   │
-                    │  Kustomize Controller│
-                    │  Helm Controller     │
-                    └──────────┬───────────┘
-                               │
-                               │ Reconcile
-                               ▼
-                    ┌──────────────────────┐
-                    │   Talos Kubernetes   │
-                    │                      │
-                    │ Infrastructure       │
-                    │        ↓             │
-                    │ Applications         │
-                    └──────────────────────┘
+┌─────────────────────────────────────┐
+│            Applications             │
+│  Vaultwarden · Firefly III · etc.   │
+├─────────────────────────────────────┤
+│          Traffic & Access           │
+│  Gateway API · Traefik · Cilium     │
+├─────────────────────────────────────┤
+│          Infrastructure             │
+│  Flux · cert-manager · CNPG · DNS   │
+├─────────────────────────────────────┤
+│          Kubernetes Platform        │
+│             Talos Linux             │
+└─────────────────────────────────────┘
 ```
 
-Git is the source of truth for the desired state of the cluster.
+Flux watches this repo (Git is the source of truth) and reconciles it against the cluster, applying infrastructure first, then apps.
+
+Internal traffic goes through the Cilium Gateway. External traffic comes in over Cloudflare Tunnel and hits Traefik before reaching any Kubernetes services. Service IPs are advertised internally over BGP.
+
+Secrets are encrypted with SOPS and age before they're committed, and Flux decrypts them at reconcile time. Nothing plain-text ever hits the repo.
 
 ---
 
-## 🌐 Traffic Architecture
+## 🛠️ Technology Stack
 
-External traffic enters through Cloudflare Tunnel and is routed through Traefik:
+### Kubernetes Platform
 
-```text
-Internet
-   │
-   ▼
-Cloudflare
-   │
-   ▼
-Cloudflare Tunnel
-   │
-   ▼
-Traefik
-External Gateway
-   │
-   ▼
-Kubernetes Services
-   │
-   ▼
-Applications
-```
+| Technology  | Role                                              |
+| :---------- | :------------------------------------------------ |
+| Talos Linux | Immutable, API-driven Kubernetes operating system |
+| Kubernetes  | Container orchestration platform                  |
+| FluxCD      | GitOps continuous delivery and reconciliation     |
+| Kustomize   | Declarative Kubernetes configuration and overlays |
 
-Internal applications can use the Cilium Gateway:
+### Networking & Ingress
 
-```text
-Internal Network
-       │
-       ▼
-Cilium Gateway
-192.168.40.1
-       │
-       ▼
-Kubernetes Services
-       │
-       ▼
-Applications
-```
+| Technology           | Role                                                      |
+| :-------------------- | :--------------------------------------------------------- |
+| Cilium                | CNI, eBPF networking, network policy, and BGP              |
+| Cilium Gateway API    | Internal application gateway                               |
+| Traefik               | External application gateway / ingress                     |
+| Gateway API           | Kubernetes-native HTTP routing                              |
+| Cloudflare Tunnel     | Secure external access without direct inbound exposure     |
 
-Cilium advertises service IPs using BGP:
+### TLS & DNS
 
-```text
-┌───────────────────┐
-│ Kubernetes Nodes  │
-│                   │
-│ Cilium BGP        │
-│ ASN 65251         │
-└─────────┬─────────┘
-          │
-          │ BGP
-          │
-          ▼
-┌───────────────────┐
-│ MikroTik RB5009   │
-│                   │
-│ ASN 65250         │
-└───────────────────┘
-```
+| Technology        | Role                                        |
+| :----------------- | :------------------------------------------- |
+| cert-manager       | Automated certificate issuance and renewal   |
+| Let's Encrypt      | Public certificate authority                 |
+| Cloudflare DNS     | DNS-01 challenge provider                    |
+| ExternalDNS        | Automated DNS record management              |
+| Technitium DNS     | Internal / split-horizon DNS                 |
 
----
+### Storage
 
-## 🔐 Secret Management
+| Technology               | Role                                |
+| :------------------------ | :------------------------------------ |
+| NAS (NFS)                 | Primary network storage             |
+| NFS Client Provisioner    | Dynamic Kubernetes PV provisioning  |
+| Local Path Provisioner    | Node-local persistent storage       |
+| Backblaze B2              | Off-site object storage for backups |
 
-Secrets are encrypted before being committed to Git using SOPS and age.
+### Databases & Disaster Recovery
 
-```text
-Secret
-  │
-  ▼
-SOPS
-  │
-  ▼
-age encryption
-  │
-  ▼
-Encrypted YAML
-  │
-  ▼
-Git
-  │
-  ▼
-FluxCD
-  │
-  ▼
-SOPS decryption
-  │
-  ▼
-Kubernetes Secret
-```
+| Technology            | Role                                |
+| :--------------------- | :------------------------------------ |
+| PostgreSQL             | Application database                |
+| CloudNativePG          | Kubernetes PostgreSQL operator      |
+| Barman Cloud Plugin    | PostgreSQL backup to object storage |
+| Backblaze B2           | Off-site PostgreSQL backup storage  |
 
-Plain-text secrets should never be committed to the repository.
+Postgres workloads get backed up to Backblaze B2, and I test restores using the manifests under `k8s-test/`.
+
+### Applications
+
+| Application       | Purpose                       |
+| :----------------- | :------------------------------ |
+| Vaultwarden        | Self-hosted password manager  |
+| Firefly III        | Personal finance management   |
+| Linkding           | Self-hosted bookmark manager  |
 
 ---
 
 ## 📂 Repository Structure
 
-The repository structure follows the FluxCD recommended separation between cluster configuration, infrastructure, and applications.
-
 ```text
 .
-├── # Talos Cluster Rebuild Runbook.md
 ├── README.md
 ├── apps
-│   ├── base
-│   │   ├── cloudflare-tunnel
-│   │   ├── firefly
-│   │   ├── linkding
-│   │   └── vaultwarden
-│   └── production
-│       ├── cloudflare-tunnel
-│       ├── firefly
-│       └── vaultwarden
-│
+│   ├── base            # cloudflare-tunnel, firefly, linkding, vaultwarden
+│   └── production      # cloudflare-tunnel, firefly, vaultwarden
 ├── clusters
-│   └── production
-│       ├── apps.yaml
-│       ├── gateway-api.yaml
-│       ├── infrastructure.yaml
-│       ├── kustomization.yaml
-│       └── flux-system
-│
+│   └── production      # Flux entrypoints: apps.yaml, infrastructure.yaml, gateway-api.yaml, flux-system
 ├── infrastructure
-│   ├── base
-│   │   ├── cilium-gateway
-│   │   └── gateway-api
-│   ├── configs
-│   │   ├── cert-manager
-│   │   ├── cnpg
-│   │   ├── external-dns
-│   │   ├── local-path-provisioner
-│   │   └── traefik
-│   ├── controllers
-│   │   ├── cert-manager.yaml
-│   │   ├── cloudnative-pg.yaml
-│   │   ├── external-dns.yaml
-│   │   ├── local-path-provisioner.yaml
-│   │   ├── nfs-client.yaml
-│   │   ├── traefik.yaml
-│   │   └── traefik-values.yaml
+│   ├── base             # cilium-gateway, gateway-api
+│   ├── configs          # cert-manager, cnpg, external-dns, local-path-provisioner, traefik
+│   ├── controllers      # per-component Flux HelmReleases/Kustomizations
 │   └── secrets
-│
-├── docs
-│   ├── firefly-cilium-gateway-runbook.md
-│   ├── fix-cloudflare-traefik-gateway.md
-│   └── recent-cloudflare-traefik-vaultwarden-runbook.md
-│
-└── k8s-test
-    ├── cnpg-restore.yaml
-    ├── dns-test.yaml
-    ├── nfs-client-test.yaml
-    ├── vaultwarden-restore.yaml
-    └── network-test
+├── docs                 # runbooks & troubleshooting guides
+└── k8s-test              # manifests for testing restores, DNS, NFS, and networking
 ```
 
 ---
 
 ## 📚 Documentation
 
-Operational procedures and troubleshooting documentation are maintained under [`docs/`](docs/).
-
-Current documentation includes:
-
-* Talos cluster rebuild procedures
-* Cilium Gateway configuration
-* Cloudflare Tunnel troubleshooting
-* Traefik Gateway troubleshooting
-* Vaultwarden ingress and TLS
-* Firefly III networking
-* PostgreSQL restore testing
-* NFS and storage testing
-* BGP and network testing
-
----
-
-## 🎯 Learning Goals
-
-This homelab is primarily a learning environment focused on:
-
-* Kubernetes administration
-* Talos Linux
-* GitOps and FluxCD
-* Kubernetes networking
-* Cilium and eBPF
-* Gateway API
-* BGP
-* TLS automation
-* DNS automation
-* PostgreSQL administration
-* Kubernetes storage
-* Database backup and disaster recovery
-* Infrastructure as Code
-* Secure secret management
-
-The goal is not simply to run applications, but to build infrastructure that is **declarative, reproducible, secure, observable, and recoverable**.
+Runbooks and troubleshooting notes (Talos rebuilds, Cilium Gateway, Cloudflare Tunnel/Traefik, Postgres restores, storage and network testing) are under [`docs/`](docs/).
