@@ -1,8 +1,0 @@
-apiVersion: traefik.io/v1alpha1
-kind: TLSStore
-metadata:
-  name: default
-  namespace: traefik # Must be in the same namespace as your Traefik pods
-spec:
-  defaultCertificate:
-    secretName: wildcard-tmatthews-casa-tls

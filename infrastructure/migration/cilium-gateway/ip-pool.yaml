@@ -1,0 +1,8 @@
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: prod-pool
+spec:
+  blocks:
+    - start: 192.168.40.50
+      stop: 192.168.40.100

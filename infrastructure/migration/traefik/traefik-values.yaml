@@ -1,0 +1,104 @@
+# -- Additional command arguments to be passed to all traefik's pods
+
+additionalArguments:
+  - "--global.checknewversion=false"
+  - "--global.sendanonymoususage=false"
+  - "--api.dashboard=true"
+  - "--serversTransport.insecureSkipVerify=true"
+  - "--entryPoints.web.transport.lifeCycle.graceTimeOut=30s"
+  - "--entryPoints.websecure.transport.lifeCycle.graceTimeOut=30s"
+  - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+  - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+
+deployment:
+  enabled: true
+  kind: Deployment
+  replicas: 2
+  revisionHistoryLimit: null
+  terminationGracePeriodSeconds: 60
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                  - traefik
+          topologyKey: "kubernetes.io/hostname"
+  readinessPath: "/ping"
+  livenessPath: "/ping"
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+  initContainers: []
+
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+
+ingressRoute:
+  dashboard:
+    enabled: true
+
+providers:
+  kubernetesCRD:
+    enabled: true
+    ingressClass: traefik
+  kubernetesIngress:
+    enabled: true
+    publishedService:
+      enabled: true
+      pathOverride: "traefik/traefik"
+  kubernetesGateway:
+    enabled: true
+    statusAddress:
+      service:
+        name: traefik
+        namespace: traefik
+
+log:
+  level: "INFO"
+
+gateway:
+  enabled: false
+
+gatewayClass:
+  enabled: true
+  name: traefik
+
+ports:
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+  websecure:
+    asDefault: true
+    port: 8443
+    expose:
+      default: true
+    exposedPort: 443
+
+autoscaling:
+  enabled: false
+
+hostNetwork: false
+
+rbac:
+  enabled: true
+  namespaced: false
+  aggregateTo: []
+
+service:
+  enabled: true
+  annotations:
+    lbipam.cilium.io/ips: "192.168.40.50"
+  labels:
+    bgp-advertise: "true"
+  single: true
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  loadBalancerSourceRanges:
+  externalIPs: []
