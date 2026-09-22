@@ -6,3 +6,4 @@ resources:
   - infrastructure.yaml
   - apps.yaml
   - gateway-api.yaml
+  - storage.yaml
