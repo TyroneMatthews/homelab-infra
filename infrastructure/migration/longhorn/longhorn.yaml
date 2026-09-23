@@ -38,7 +38,7 @@ spec:
       storageMinimalAvailablePercentage: 10
       upgradeChecker: ~
       defaultReplicaCount: 3
-      storageNetwork: longhorn-system/longhorn-network
+      # storageNetwork: longhorn-system/longhorn-network
       guaranteedInstanceManagerCPU: 15
 
     persistence:

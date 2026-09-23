@@ -113,7 +113,8 @@ spec:
     certificate:
       createClientCertificate: true
       createServerCertificate: true
-      createIssuer: true
-      issuerName: ""
+      createIssuer: false
+      issuerName: "letsencrypt-production"
+      issuerKind: "ClusterIssuer"
       duration: 2160h
       renewBefore: 360h
