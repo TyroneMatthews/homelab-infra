@@ -113,8 +113,8 @@ spec:
     certificate:
       createClientCertificate: true
       createServerCertificate: true
-      createIssuer: false
-      issuerName: "letsencrypt-production"
-      issuerKind: "ClusterIssuer"
+      createIssuer: true
+      issuerName: "barman-selfsigned"
+      issuerKind: "Issuer"
       duration: 2160h
       renewBefore: 360h
