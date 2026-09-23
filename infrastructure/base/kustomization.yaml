@@ -7,6 +7,5 @@ resources:
   - cnpg
   - cilium-gateway
   # - external-dns
-  - traefik
   - external-dns
   
