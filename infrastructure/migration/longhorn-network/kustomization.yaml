@@ -2,4 +2,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - plugin-barman-cloud.yaml
+  - namespace.yaml
+  - longhorn-network-nad.yaml

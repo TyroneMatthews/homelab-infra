@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: traefik
 
 resources:
+  - traefik.yaml
   - dashboard-ingress.yaml
   - gatewayclass.yaml
   - referencegrant-cilium-gateway.yaml

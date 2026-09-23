@@ -7,7 +7,7 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 5m
-  path: ./infrastructure/secrets/production
+  path: ./infrastructure/secrets/migration
   prune: true
   sourceRef:
     kind: GitRepository
@@ -22,7 +22,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-base
+  name: infra-controllers
   namespace: flux-system
 spec:
   dependsOn:
@@ -41,16 +41,16 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-production
+  name: infra-migration
   namespace: flux-system
 spec:
   dependsOn:
-    - name: infra-base
+    - name: infra-controllers
   interval: 1h
   retryInterval: 2m
   timeout: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/production
+  path: ./infrastructure/migration
   prune: true
