@@ -28,6 +28,7 @@ spec:
     - name: gateway-api-crds
     - name: infra-secrets
     - name: longhorn
+    - name: cert-manager-operator
   interval: 10m
   path: ./infrastructure/base
   prune: true
@@ -42,8 +43,6 @@ metadata:
   name: cert-manager-operator
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: infra-base
   interval: 10m
   timeout: 5m
   path: ./infrastructure/base/cert-manager-operator
