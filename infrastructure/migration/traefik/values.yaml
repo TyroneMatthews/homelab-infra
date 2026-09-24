@@ -2,13 +2,8 @@ deployment:
   replicas: 3
 
 service:
-  enabled: true
   annotations:
     lbipam.cilium.io/ips: "192.168.40.50"
+
   labels:
     bgp-advertise: "true"
-  single: true
-  type: LoadBalancer
-  externalTrafficPolicy: Local
-  loadBalancerSourceRanges:
-  externalIPs: []

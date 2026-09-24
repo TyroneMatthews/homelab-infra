@@ -5,10 +5,13 @@ resources:
   - ../../base/traefik
   - dashboard-ir.yaml
 
+patches:
+  - path: helmrelease-values-patch.yaml
+
 configMapGenerator:
-  - name: traefik-values
+  - name: traefik-production-values
     namespace: traefik
     options:
       disableNameSuffixHash: true
     files:
-      - values.yaml=traefik-values.yaml
+      - values.yaml
