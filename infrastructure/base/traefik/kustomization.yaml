@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: traefik
 
 resources:
+  - namespace.yaml
   - traefik.yaml
   - dashboard-ingress.yaml
   - gatewayclass.yaml
