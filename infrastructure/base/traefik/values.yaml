@@ -114,3 +114,9 @@ rbac:  # @schema additionalProperties: false
   aggregateTo: []
   # List of Kubernetes secrets that are accessible for Traefik. If empty, then access is granted to every secret.
   # secretResourceNames: []
+
+service:
+  enabled: true
+  type: LoadBalancer
+  single: true
+  externalTrafficPolicy: Local

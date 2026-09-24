@@ -1,0 +1,8 @@
+service:
+  enabled: true
+  annotations:
+    lbipam.cilium.io/ips: "192.168.40.15"
+  
+  labels:
+    bgp-advertise: "true"
+ 

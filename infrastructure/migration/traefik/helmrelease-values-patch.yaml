@@ -1,0 +1,10 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  valuesFrom:
+    - kind: ConfigMap
+      name: traefik-migration-values
+      valuesKey: values.yaml
