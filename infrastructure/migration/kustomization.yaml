@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - longhorn
   # - traefik
-  - cilium-gateway
-  - ../base/cert-manager
+  - ../base/cert-manager-operator
+  - ../base/cert-manager-configs
   - ../base/cilium-gateway
+  - cilium-gateway

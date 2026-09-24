@@ -12,7 +12,7 @@ spec:
     secretRef:
       name: sops-age
   dependsOn:
-    - name: infra-controllers
+    - name: infra-migration
   sourceRef:
     kind: GitRepository
     name: flux-system

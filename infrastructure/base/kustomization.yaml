@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - nfs-client
-  - cert-manager
   - cnpg
   - cilium-gateway
   # - external-dns
