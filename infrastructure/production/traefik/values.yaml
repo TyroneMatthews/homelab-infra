@@ -1,0 +1,18 @@
+service:
+  enabled: true
+  annotations:
+    lbipam.cilium.io/ips: "192.168.40.15"
+  labels:
+    bgp-advertise: "true"
+  ## -- Single service is using `MixedProtocolLBService` feature gate.
+  ## -- When set to false, it will create two Service, one for TCP and one for UDP.
+  single: true
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  loadBalancerSourceRanges:
+  # - 192.168.0.1/32
+  # - 172.16.0.0/16
+  ## -- Class of the load balancer implementation
+  # loadBalancerClass: service.k8s.aws/nlb
+  externalIPs: []
+  # - 1.2.3.4

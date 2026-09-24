@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base/traefik
+  - dashboard-ingress.yaml
+  - service.yaml
 
 configMapGenerator:
   - name: traefik-values
