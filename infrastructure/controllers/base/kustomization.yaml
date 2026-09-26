@@ -5,6 +5,6 @@ resources:
   - nfs-client
   - cnpg
   - cilium-gateway
-  # - external-dns
+  - cert-manager
   - external-dns
   

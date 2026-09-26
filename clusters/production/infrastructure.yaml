@@ -1,7 +1,24 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-secrets
+  name: production-infra-crds
+  namespace: flux-system
+spec:
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+  path: ./infrastructure/crds/gateway-api
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: production-infra-secrets
   namespace: flux-system
 spec:
   interval: 1h
@@ -22,68 +39,37 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-base
+  name: production-infra-controllers
   namespace: flux-system
 spec:
   dependsOn:
-    - name: gateway-api-crds
-    - name: infra-secrets
-    - name: cert-manager-operator
+    - name: production-infra-crds
+    - name: production-infra-secrets
   interval: 10m
-  path: ./infrastructure/base
+  retryInterval: 2m
+  timeout: 10m
+  path: ./infrastructure/production/controllers
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
   wait: true
-  timeout: 5m
+
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cert-manager-operator
-  namespace: flux-system
-spec:
-  interval: 10m
-  timeout: 5m
-  path: ./infrastructure/base/cert-manager-operator
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: true
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: cert-manager-configs
+  name: production-infra-configs
   namespace: flux-system
 spec:
   dependsOn:
-    - name: cert-manager-operator
+    - name: production-infra-controllers
   interval: 10m
-  timeout: 5m
-  path: ./infrastructure/base/cert-manager-configs
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  wait: true
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: infra-production
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: infra-base
-    - name: cert-manager-configs
-  interval: 1h
   retryInterval: 2m
   timeout: 5m
+  path: ./infrastructure/production/configs
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/production
-  prune: true
+  wait: true
