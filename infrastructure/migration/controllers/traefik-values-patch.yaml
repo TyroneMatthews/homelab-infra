@@ -1,0 +1,16 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+
+spec:
+  values:
+    deployment:
+      replicas: 3
+
+    service:
+      annotations:
+        lbipam.cilium.io/ips: "192.168.40.50"
+      labels:
+        bgp-advertise: "true"
