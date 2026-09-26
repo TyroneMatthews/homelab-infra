@@ -15,39 +15,32 @@ metadata:
   namespace: longhorn-system
 spec:
   interval: 1h
+
   chart:
     spec:
       chart: longhorn
+      version: "1.12.1"
       reconcileStrategy: ChartVersion
-      version: "1.12.1" # Adjust to your target Longhorn version
       sourceRef:
         kind: HelmRepository
         name: longhorn-repo
+
   values:
-    # Essential for GitOps automation to prevent hanging upgrade hooks
-    global:
-      preUpgradeChecker:
-        job:
-          enabled: false
+    preUpgradeChecker:
+      jobEnabled: false
+
     defaultSettings:
       defaultDataPath: /var/mnt/longhorn
-      defaultDataLocality: ~
-      replicaSoftAntiAffinity: ~
-      replicaAutoBalance: ~
+      defaultReplicaCount: 3
       storageOverProvisioningPercentage: 100
       storageMinimalAvailablePercentage: 10
-      upgradeChecker: ~
-      defaultReplicaCount: 3
-      # storageNetwork: longhorn-system/longhorn-network
       guaranteedInstanceManagerCPU: 15
 
     persistence:
-  # Default storage class
       defaultClass: true
       defaultClassReplicaCount: 3
       defaultFsType: ext4
 
-    # Resource limits
     longhornManager:
       resources:
         requests:
@@ -60,6 +53,5 @@ spec:
           cpu: 100m
           memory: 128Mi
 
-    # Enable the UI
     longhornUI:
       replicas: 2
