@@ -1,0 +1,9 @@
+# infrastructure/migration/controllers/external-dns-values-patch.yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: external-dns
+  namespace: external-dns
+spec:
+  values:
+    txtOwnerId: h1-k8s-prod
