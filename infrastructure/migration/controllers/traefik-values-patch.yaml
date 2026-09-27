@@ -13,4 +13,4 @@ spec:
       annotations:
         lbipam.cilium.io/ips: "192.168.40.50"
       labels:
-        bgp-advertise: "true"
+        bgp-advertise: "production"
