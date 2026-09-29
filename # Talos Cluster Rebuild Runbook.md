@@ -1,4 +1,4 @@
-# Talos Cluster Rebuild Runbook
+# Talos Cluster MAC cluster(Stage) Rebuild Runbook
 
 ## Cluster Information
 
@@ -6,7 +6,7 @@
 | ------------------ | -------------------------------------------------------------- |
 | **Cluster Name**   | `home-k8s-p01`                                                 |
 | **Endpoint**       | `home-k8s-p01.tmatthews.casa`                                  |
-| **Control Planes** | `192.168.30.2`, `192.168.30.3`                                 |
+| **Control Planes** | `IP address for cp02`, `IP address for cp03`                   |
 | **Workers**        | None                                                           |
 | **Talos Config**   | `/root/Labs/kubernetes/Talos/home-k8s-p01/secrets/talosconfig` |
 
