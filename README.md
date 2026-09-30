@@ -20,7 +20,7 @@ I use it to get hands-on with:
 * Security and access control
 * Running self-hosted apps
 
-The point of the lab isn't just to have apps running. It's to actually understand what's happening underneath: how the pieces talk to each other, how to change infra without breaking it, and how to recover when something inevitably does break. Everything here aims to be declarative, reproducible, secure, and recoverable.
+The point isn't just to have apps running. It's to actually understand what's happening underneath: how the pieces talk to each other, how to change infra without breaking it, and how to recover when something inevitably does break. Everything here aims to be declarative, reproducible, secure, and recoverable.
 
 Infra, apps, and config all live in Git so changes can be reviewed, reproduced, and rolled back.
 
@@ -121,17 +121,25 @@ Postgres workloads get backed up to Backblaze B2, and I test restores using the 
 .
 ├── README.md
 ├── apps
-│   ├── base            # cloudflare-tunnel, firefly, linkding, vaultwarden
-│   └── production      # cloudflare-tunnel, firefly, vaultwarden
+│   ├── base            # cloudflare-tunnel, firefly, linkding, vaultwarden manifests
+│   ├── migration
+│   └── production      # cloudflare-tunnel, firefly, vaultwarden overlays
 ├── clusters
-│   └── production      # Flux entrypoints: apps.yaml, infrastructure.yaml, gateway-api.yaml, flux-system
+│   ├── migration        # Flux entrypoints: apps.yaml, infrastructure.yaml, flux-system
+│   └── production       # Flux entrypoints: apps.yaml, infrastructure.yaml, flux-system
 ├── infrastructure
-│   ├── base             # cilium-gateway, gateway-api
-│   ├── configs          # cert-manager, cnpg, external-dns, local-path-provisioner, traefik
-│   ├── controllers      # per-component Flux HelmReleases/Kustomizations
+│   ├── configs/base      # cert-manager, cilium-gateway, traefik
+│   ├── controllers
+│   │   ├── addons        # local-path-provisioner, longhorn
+│   │   └── base           # cert-manager, cnpg, external-dns, nfs-client, traefik
+│   ├── crds/gateway-api
+│   ├── migration          # config/controller overlays for the migration cluster
+│   ├── production          # config/controller overlays for the production cluster
 │   └── secrets
-├── docs                 # runbooks & troubleshooting guides
-└── k8s-test              # manifests for testing restores, DNS, NFS, and networking
+│       ├── migration
+│       └── production
+├── docs                    # runbooks & troubleshooting guides
+└── k8s-test
 ```
 
 ---
