@@ -5,7 +5,7 @@ metadata:
   namespace: vaultwarden
 spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie  # pin to the same PG 18 image the Mac runs
-  instances: 1 # Set to 2 or 3 for high availability (primary + standby replicas)
+  instances: 2 # Set to 2 or 3 for high availability (primary + standby replicas)
   # Storage configuration
   storage:
     size: 10Gi

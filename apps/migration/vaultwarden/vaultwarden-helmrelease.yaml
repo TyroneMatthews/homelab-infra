@@ -1,0 +1,79 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+spec:
+  interval: 30m
+  install:
+    remediation:
+      retries: 0
+  upgrade:
+    remediation:
+      retries: 0
+  chart:
+    spec:
+      chart: vaultwarden
+      version: "0.44.x"
+      sourceRef:
+        kind: HelmRepository
+        name: vaultwarden
+        namespace: vaultwarden
+      interval: 1h
+  values:
+    fullnameOverride: vaultwarden
+    domain: "https://test-vaultwarden.tmatthews.casa"
+    image:
+      tag: "1.37.1"
+    env:
+      ROCKET_PORT: "8080"
+    websocket:
+      enabled: true
+    webVaultEnabled: true
+    database:
+      type: postgresql
+      host: "vaultwarden-postgresql-rw.vaultwarden.svc.cluster.local"
+      port: "5432"
+      dbName: "vaultwarden"
+  # Point to the secret holding your credentials:
+      existingSecret: vaultwarden-db-secret
+      existingSecretUserKey: username
+      existingSecretPasswordKey: password
+      connectionRetries: 30
+      maxConnections: 10
+    adminToken:
+      existingSecret: vw-secret
+      existingSecretKey: ADMIN_TOKEN
+    storage:
+      data:
+        name: vaultwarden-data
+        size: 10Gi
+        class: ugreen-nfs-sc
+        accessMode: ReadWriteOnce
+        path: /data
+    service:
+      enabled: true
+      type: ClusterIP
+      port: 8080
+    ingress:
+      enabled: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 20
+      timeoutSeconds: 5
+      periodSeconds: 30
+      successThreshold: 1
+      path: /
+    readinessProbe:
+      enable: true
+      path: /
+      initialDelaySeconds: 10
+      periodSeconds: 15
+      timeoutSeconds: 5
