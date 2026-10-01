@@ -22,7 +22,7 @@ spec:
       interval: 1h
   values:
     fullnameOverride: vaultwarden
-    domain: "https://test-vaultwarden.tmatthews.casa"
+    domain: "https://vaultwarden.tmatthews.casa"
     image:
       tag: "1.37.1"
     env:

@@ -14,7 +14,7 @@ spec:
   - match: Host(`vaultwarden.tmatthews.casa`) # Traefik evaluates this dynamically
     kind: Rule
     services:
-    - name:              # Your internal Kubernetes app service
+    - name: vaultwarden           # Your internal Kubernetes app service
       port: 80
 
   tls:
