@@ -10,8 +10,8 @@ resources:
   - vw-secret.yaml
   - barman-object-store.yaml
   - cnpg-db.yaml
-  # - vaultwarden-helmrepository.yaml
-  # - vaultwarden-helmrelease.yaml
-  # - httproute.yaml
-  # - https-redirect.yaml
-  # - backup-schedule.yaml
+  - vaultwarden-helmrepository.yaml
+  - vaultwarden-helmrelease.yaml
+  - httproute.yaml
+  - https-redirect.yaml
+  - backup-schedule.yaml
