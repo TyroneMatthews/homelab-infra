@@ -1,0 +1,35 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: vaultwarden-postgresql
+  namespace: vaultwarden
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie  # pin to the same PG 18 image the Mac runs
+  instances: 1 # Set to 2 or 3 for high availability (primary + standby replicas)
+  # Storage configuration
+  storage:
+    size: 10Gi
+    storageClass: longhorn-db
+
+  bootstrap:
+    recovery:
+      source: vaultwarden-mac
+      database: vaultwarden     # match the existing db/owner names
+      owner: vaultwarden
+      secret:
+        name: vaultwarden-db-secret
+      # no recoveryTarget = restore to the latest archived WAL
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: vaultwarden-b2
+        serverName: vaultwarden-postgresql-p2s   # new, empty archive for P2S
+  
+  externalClusters:
+    - name: vaultwarden-mac
+      plugin:
+        name: barman-cloud.cloudnative-pg.io
+        parameters:
+          barmanObjectName: vaultwarden-b2
+          serverName: vaultwarden-postgresql     # what the Mac cluster archives to now

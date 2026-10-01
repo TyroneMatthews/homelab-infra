@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vaultwarden
+
+resources:
+  - namespace.yaml
+  - backblaze-creds.yaml
+  - vaultwarden-db-secret.yaml
+  - vaultwarden-db-url.yaml
+  - vw-secret.yaml
+  - barman-object-store.yaml
+  - cnpg-db.yaml
+  # - vaultwarden-helmrepository.yaml
+  # - vaultwarden-helmrelease.yaml
+  # - httproute.yaml
+  # - https-redirect.yaml
+  # - backup-schedule.yaml
