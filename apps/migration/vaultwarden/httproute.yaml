@@ -11,7 +11,7 @@ spec:
     - websecure # Matches Traefik's internal port 80 entrypoint
     # - web # Matches Traefik's internal port 80 entrypoint
   routes:
-  - match: Host(`prod-vaultwarden.tmatthews.casa`) # Traefik evaluates this dynamically
+  - match: Host(`vaultwarden.tmatthews.casa`) # Traefik evaluates this dynamically
     kind: Rule
     services:
     - name:              # Your internal Kubernetes app service
