@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: backblaze-b2-creds
+    namespace: vaultwarden
+type: Opaque
+stringData:
+    ACCESS_KEY_ID: ENC[AES256_GCM,data:E2YMkwRVOXGkzF9oSl4YGXTdwCKBlZvDgQ==,iv:1aCnUS0MgzlhzvIU2TodGaWZdG/Fx4mrI5P7d1sKQqM=,tag:x15KTht/K9YLlHKgUq5W/g==,type:str]
+    ACCESS_SECRET_KEY: ENC[AES256_GCM,data:Rg75OT8HariL9aQtbdEQNmjr+BsetCFrekYqyh5XXA==,iv:KulKPUkHEgovsuEny1Uh4TcRA2V0/onxooYrhyQa7g4=,tag:ByIyLmDcKXgoCVdrg0lJEQ==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBpWE9HT2M0UmZqUVdiU1RM
+            b2l3S3J3RlpjNk1OdE1RcHVIOUszRUxTclRJCmptY1hMVHNEK2owVW11eTJFcFE3
+            TC9GYWpjRUkwRnl6SVFMMjQvWFVteHMKLS0tIEM4VWFoNkk1eUdDekx3QTZoUDRv
+            cUFWUURJVlp6NE9lelBaVTJVZ2RxQlkK3oahCx2XLNxOtKlShszOCqfE4X/OTAck
+            6MIepN+bj1nMPi4dQqe3/dS5WR/pnuy179hKLqWvgqn/d50CYjagQw==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1c00k2slacvsm6ntjdl0fp7u6qr882zr257yxqeqt9adqqqmuef9qnnx6zz
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-10-01T02:17:58Z"
+    mac: ENC[AES256_GCM,data:XtV08afRMDGA4SzJVoPfSipgCReBL9ZJSjX9brMpwKTErmMsyLolBqwoNErVrfXdTCcrZq2/N2UeB2A7DYqOGDqkUM/hajXZgdCAPv/w8WmePSAmEpUseUkuEfMDZ+gegdPjjS4mvpye1Q7MuRP/bx6vfwQ7O6RfCcrvGRwy69k=,iv:cOdGuQhwEy4eVhtjKYXrEML8kObyGvSXJt/J4i9KGlg=,tag:HBx+YGemY6IoZketlYvTRA==,type:str]
+    version: 3.13.2

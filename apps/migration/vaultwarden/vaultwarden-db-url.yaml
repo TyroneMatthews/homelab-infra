@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: vaultwarden-db-url
+    namespace: vaultwarden
+type: Opaque
+stringData:
+    database-url: ENC[AES256_GCM,data:Iw5mFCVFFlXpOjBgOolbt8ZsmI8KAhpo2tSW9bfbxALbG0RSyRo0cu5qXdQ5F6BHDlnNiAtduZN8vH0VsB8813lP+RMXDyEeIiukL0SZssofYN88YyPTty4QrBq5AECUVergEhCzpGLHVu4CHOeSYwGAVgOdv+/m+pGxFIIlViClDQ==,iv:26TQSkxJjAwn6C5faA/lLpju1KX820e/NeBGEY6M+OM=,tag:NPuZ7wgRiduN0Tsylubmbg==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuNU9jNm02WHFUelUyODN0
+            bzZ1dlhmTFhOTHNVcnV1VEdlMEJ2L0JQU2hBCkhvK1podjdqQVdoMVRLMFBnNkVr
+            bGNTRjRxaVZwMFRnV3ZWY0E3UUt3dzAKLS0tIFV6S2JxUWtONUJsanhxcURhNEdl
+            V3pwS1dXMlk2bVpOV3RyYmRHZ0tBMk0Kfd7YMvLj0A/iVV2s6TqCJxWZQhMQsTOe
+            2ps4BkqasWEOFFDaNWv/aVpjojK3bBy719WQqQjmYi9ZPBRciFuzzg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1c00k2slacvsm6ntjdl0fp7u6qr882zr257yxqeqt9adqqqmuef9qnnx6zz
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-10-01T02:17:36Z"
+    mac: ENC[AES256_GCM,data:8hIq5I7YfCfXztJE7Ajv7Eex+KlCeT/IWUJ0gmG5MEkkwa+Adm1yrWHKxn6A8pLKXXX18TWjrUVA7aPmo7wS5ac7FY2/xhMZ+F7fpbK9g6Dso3Lh0WdsD2bqGGIhYR3G4n8tM2H1ozpi7oQmfGWgrnXft81DbK0lML5D/FD7gmI=,iv:s9bwuMbqizVvK08yp3S8Gj8q15EgBi40Owl6tQAv8i4=,tag:YZEqF5SKkj6r6hCjiPXXjA==,type:str]
+    version: 3.13.2

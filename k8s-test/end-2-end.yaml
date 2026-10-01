@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: disposable-test
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: web-data
+  namespace: disposable-test
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: longhorn        # adjust per cluster
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: disposable-test
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate                  # RWO volume: avoid two pods fighting over it
+  selector:
+    matchLabels: { app: web }
+  template:
+    metadata:
+      labels: { app: web }
+    spec:
+      initContainers:
+        - name: seed
+          image: busybox
+          # only writes on first run, so a later restart proves persistence
+          command: ["sh", "-c", "[ -f /data/index.html ] || echo \"first written: $(date)\" > /data/index.html"]
+          volumeMounts:
+            - { name: data, mountPath: /data }
+      containers:
+        - name: nginx
+          image: nginx:stable-alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - { name: data, mountPath: /usr/share/nginx/html }
+          readinessProbe:
+            httpGet: { path: /, port: 80 }
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: web-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: disposable-test
+spec:
+  selector: { app: web }
+  ports:
+    - port: 80
+      targetPort: 80
+---
+# Internal path: Cilium internal-gateway -> external-dns -> Technitium
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: web-internal
+  namespace: disposable-test
+spec:
+  parentRefs:
+    - name: internal-gateway
+      namespace: gateway-system
+  hostnames: ["disposable.tmatthews.casa"]
+  rules:
+    - backendRefs:
+        - name: web
+          port: 80
+---
+# Public path: Traefik public-gateway <- Cloudflare Tunnel
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: web-public
+  namespace: disposable-test
+  annotations:
+    external-dns.alpha.kubernetes.io/target: "192.168.40.50"
+spec:
+  ingressClassName: traefik
+  entryPoints:
+    - websecure # Matches Traefik's internal port 80 entrypoint
+    # - web
+  routes:
+    - match: Host(`disposable-pub.tmatthews.casa`)
+      kind: Rule
+      services:
+        - name: web
+          port: 80
+  tls:
+    secretName: wildcard-tmatthews-casa-tls
