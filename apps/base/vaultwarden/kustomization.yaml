@@ -11,7 +11,7 @@ resources:
   - postgres-cluster.yaml
   - vaultwarden-helmrepository.yaml
   - vaultwarden-helmrelease.yaml
-  - httproute.yaml
-  - https-redirect.yaml
+  #- httproute.yaml
+  #- https-redirect.yaml
   - vw-secret.yaml
   - backup-schedule.yaml
