@@ -28,7 +28,9 @@ Infra, apps, and config all live in Git so changes can be reviewed, reproduced, 
 
 ## 🧭 Architecture
 
-Four layers, roughly:
+![Homelab Network Architecture](docs/architecture/network-topology.svg)
+
+![Homelab Gateway Architecture](docs/architecture/gateway-routing.svg)
 
 ```text
 ┌─────────────────────────────────────┐
