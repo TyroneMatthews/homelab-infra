@@ -32,7 +32,7 @@ Infra, apps, and config all live in Git so changes can be reviewed, reproduced, 
 
 ### Gateway Routing
 
-![Gateway Routing](docs/architecture/gateway-architecture.drawio.svg)
+![Gateway Routing](docs/architecture/gateway.drawio.svg)
 
 ```text
 ┌─────────────────────────────────────┐
