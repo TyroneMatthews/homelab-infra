@@ -28,7 +28,11 @@ Infra, apps, and config all live in Git so changes can be reviewed, reproduced, 
 
 ## 🧭 Architecture
 
-Four layers, roughly:
+![Homelab Network Architecture](docs/architecture/network-topology.svg)
+
+### Gateway Routing
+
+![Gateway Routing](docs/architecture/gateway-architecture.drawio.svg)
 
 ```text
 ┌─────────────────────────────────────┐
@@ -50,7 +54,7 @@ Flux watches this repo (Git is the source of truth) and reconciles it against th
 
 Internal traffic goes through the Cilium Gateway. External traffic comes in over Cloudflare Tunnel and hits Traefik before reaching any Kubernetes services. Service IPs are advertised internally over BGP.
 
-Secrets are encrypted with SOPS and age before they're committed, and Flux decrypts them at reconcile time. Nothing plain-text ever hits the repo.
+Secrets are encrypted using SOPS and age prior to commit, with Flux decrypting them at reconcile time. No plaintext secrets ever hit the repository. Gitleaks validates that no unencrypted secrets enter the repo before anything is committed.
 
 ---
 
@@ -93,6 +97,7 @@ Secrets are encrypted with SOPS and age before they're committed, and Flux decry
 | NFS Client Provisioner    | Dynamic Kubernetes PV provisioning  |
 | Local Path Provisioner    | Node-local persistent storage       |
 | Backblaze B2              | Off-site object storage for backups |
+| Longhorn                  | Dynamic Kubernetes PV provisioning P2 Cluster |
 
 ### Databases & Disaster Recovery
 
