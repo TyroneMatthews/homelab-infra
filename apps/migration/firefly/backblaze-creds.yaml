@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: backblaze-b2-secret
+    namespace: firefly
+type: Opaque
+stringData:
+    ACCESS_KEY_ID: ENC[AES256_GCM,data:Fisog/Ff9ZqU4idnTIvy28mFOTcZJzJh5w==,iv:mWG8ZpUrD8sEH2Pi2e/3pNuN6Hb9nEV9M7Esp9rHDsQ=,tag:23gRZemckbJxMfKjeYl6XA==,type:str]
+    ACCESS_SECRET_KEY: ENC[AES256_GCM,data:gkUnp3vLrWiiN9Zj/9ZvtjiS+OOuT/UUxlePp6KxSA==,iv:v6e/v/cfJ1+jFbkQNXkF0fll+KXzuN9Cm27NH+jxQb0=,tag:cv9Ro+fbqfYNTXUT8jQdEw==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBycngzVjdXLzh4eGVYNGJF
+            Zm4xTUwrdFN1b2lQMDFaRm9ZU3N6QWFneFYwCnR5TzcwTkd6RURJZUkwMkw4NGtC
+            Y1o4SWFpMlR2RWMwbk9pdGwvYzV1RkkKLS0tIGIrS1pneFZVTGI1N1RaTnNlOTBJ
+            M3NNWnZabTd2UWFSRE9LblBVQ3pWclkKAVl85uxEbVBgnDO+ENUTnTj+jJJzyYE9
+            2yjf7u4AJcjK7AwPayqocxF1OG95+QgFUKsNmw+Ox6YRnlCupQICYQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age1c00k2slacvsm6ntjdl0fp7u6qr882zr257yxqeqt9adqqqmuef9qnnx6zz
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-10-18T03:22:40Z"
+    mac: ENC[AES256_GCM,data:WUqeWjDrIGORHfmFaKQewHA0avtiIb6E6NkYlZdbx9aJ5mgP9mdNPqMJLjzoR6+FWBSxR13I5V1u0p7f0FUMlCQ2b9GJNQqR5XJDBZVGh8pM1qCEfVsxyTGxjndkZEb9IIHdJTcHAYeWAkgUc1keD6wjA5HTGc/WLpb+zXHWiLY=,iv:nw/UGVM5ZDZw7hXSUE6+NYQFD25428eCic6jwn42cHM=,tag:cIW2td9t4sUS+fo0Z9I0HA==,type:str]
+    version: 3.13.2
