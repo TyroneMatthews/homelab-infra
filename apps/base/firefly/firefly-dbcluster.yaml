@@ -26,7 +26,7 @@ spec:
       #   targetTime: "2026-08-24T10:58:00"
   plugins:
     - name: barman-cloud.cloudnative-pg.io
-      isWALArchiver: true
+      isWALArchiver: false
       parameters:
         barmanObjectName: firefly-b2
         serverName: firefly-db         # NEW clean identity going forward distinct name for the PITR cluster, used to store WAL files in B2 bucket
