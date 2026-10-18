@@ -45,7 +45,7 @@ spec:
     httpRoute:
       enabled: true
       hostnames:
-        - firefly-importer.tmatthews.casa
+        - hl-firefly-importer.tmatthews.casa
       parentRefs:
         - name: internal-gateway
           namespace: gateway-system
