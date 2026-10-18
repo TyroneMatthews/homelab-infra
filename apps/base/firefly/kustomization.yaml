@@ -13,4 +13,4 @@ resources:
   - firefly-dbcluster.yaml
   - backblaze-creds.yaml
   - backblaze-store-object.yaml
-  - httproute.yaml
+  # - httproute.yaml
