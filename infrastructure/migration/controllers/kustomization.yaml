@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../controllers/base
   - ../../controllers/addons/longhorn
+  - ./monitoring-namespace.yaml
 
 patches:
   - path: ./traefik-values-patch.yaml
